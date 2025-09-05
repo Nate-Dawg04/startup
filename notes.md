@@ -10,15 +10,19 @@
 
 ## Git + Workflow Help
 # Workflow
+'''
 git pull
 // Make changes to code
 git commit -am "Message here
 git push
+'''
 
 **When getting changes from Github on VS Code:**
+'''
 git fetch
 git status
 git pull
+'''
 
 # Helpful git commands:
 git status                  //current status of project
