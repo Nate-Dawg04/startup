@@ -1,11 +1,8 @@
 # Your startup name here
 
-## Startup Ideas: 
-Website to manage all my assignments across platforms, goals for the semester, and personal study plans
-
 [My Notes](notes.md)
 
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 
 > [!NOTE]
