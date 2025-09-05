@@ -1,5 +1,8 @@
 # Your startup name here
 
+## Startup Ideas
+1. A program for managing all my school assignments across platforms, tracking and updating my goals, as well as creating a plan for my personal study for the week
+
 [My Notes](notes.md)
 
 A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
