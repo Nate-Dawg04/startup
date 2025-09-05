@@ -8,6 +8,26 @@
 - [Canvas](https://byu.instructure.com)
 - [MDN](https://developer.mozilla.org)
 
+## Git + Workflow Help
+# Workflow
+git pull
+// Make changes to code
+git commit -am "Message here
+git push
+
+**When getting changes from Github on VS Code:**
+git fetch
+git status
+git pull
+
+# Helpful git commands:
+git status                  //current status of project
+git push                    //push changes to repository
+git pull                    //receive new changes made by others or on github website
+git add .                   //adds all files to the current commit
+git commit -m "Text here"   
+git commit -am              //same as last one but also adds the files to the push
+
 ## AWS
 
 My IP address is: 54.81.96.130
