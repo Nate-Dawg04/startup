@@ -8,8 +8,8 @@
 - [Canvas](https://byu.instructure.com)
 - [MDN](https://developer.mozilla.org)
 
-## Git + Workflow Help
-# Workflow
+# Git + Workflow Help
+## Workflow
 ```
 git pull
 // Make changes to code
@@ -24,7 +24,7 @@ git status
 git pull
 ```
 
-# Helpful git commands:
+## Helpful git commands:
 git status                  //current status of project
 git push                    //push changes to repository
 git pull                    //receive new changes made by others or on github website
