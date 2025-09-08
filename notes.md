@@ -25,12 +25,14 @@ git pull
 ```
 
 ## Helpful git commands:
+'''
 git status                  //current status of project
 git push                    //push changes to repository
 git pull                    //receive new changes made by others or on github website
 git add .                   //adds all files to the current commit
 git commit -m "Text here"   
 git commit -am              //same as last one but also adds the files to the push
+'''
 
 ## AWS
 
