@@ -2,24 +2,19 @@
 
 [My Notes](notes.md)
 
-Frustrated with switching between Learning Suite, Canvas, and a thousand other platforms for school assignments? Tired of losing track of your new years resolutions? Wouldn't it be great if there was just a single place to keep track of everything... if only... but wait! Look no farther than Procrastinot, an all new platform designed to let you focus on what matters most: the homework itself, your goals, and your gospel study! Find all you homework assignments in one place, keep track of and review your personal goals, and create a personalized gospel study plan for the week.  
-
 ## 🚀 Specification Deliverable
-
-> [!NOTE]
->  Fill in this sections as the submission artifact for this deliverable. You can refer to this [example](https://github.com/webprogramming260/startup-example/blob/main/README.md) for inspiration.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
+- [X] Proper use of Markdown
+- [X] A concise and compelling elevator pitch
 - [ ] Description of key features
 - [ ] Description of how you will use each technology
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Frustrated with switching between Learning Suite, Canvas, and a thousand other platforms for school assignments? Tired of losing track of your new years resolutions? Wouldn't it be great if there was just a single place to keep track of everything... if only... but wait! Look no farther than **Procrastinot**, an all new platform designed to let you focus on what matters most: the homework itself, your goals, and your gospel study! Find all you homework assignments in one place, keep track of and review your personal goals, and create a personalized gospel study plan for the week.  
 
 ### Design
 
