@@ -20,7 +20,7 @@ Frustrated with switching between Learning Suite, Canvas, and a thousand other p
 
 Here's a few pictures demonstrating a basic design as well as some of the features:
 
-![Design image](placeholder.png)
+![Design image](DesignSketch.jpg)
 
 
 
