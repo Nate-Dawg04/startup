@@ -2,6 +2,17 @@
 
 [My Notes](notes.md)
 
+## Sections
+- [Specification Deliverable](#-specification-deliverable)
+- [AWS Deliverable](#-aws-deliverable)
+- [HTML Deliverable](#-html-deliverable)
+- [CSS Deliverable](#-css-deliverable)
+- [React part 1: Routing Deliverable](#-react-part-1-routing-deliverable)
+- [React part 2: Reactivity Deliverable](#-react-part-2-reactivity-deliverable)
+- [Service Deliverable](#-service-deliverable)
+- [DB Deliverable](#-db-deliverable)
+- [WebSocket Deliverable](#-websocket-deliverable)
+
 ## 🚀 Specification Deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
