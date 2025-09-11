@@ -35,7 +35,7 @@ Here's a few pictures demonstrating a basic design as well as some of the featur
 
 ### Technologies
 
-I am going to use the required technologies in the following ways.
+I am going to use the required technologies in the following ways:
 
 - **HTML** - Give the structure of the entire application. Multiple HTML pages, including one for login, one for the main dashboard, another for tracking goals, and another for gospel study plans. 
 - **CSS** - Provide style to the website with a good color scheme, fonts, and use of whitespace. 
@@ -46,7 +46,7 @@ I am going to use the required technologies in the following ways.
     - Suggest goals using ChatGPT API
     - Send notifications for upcoming assignments and tasks
 - **DB/Login** - Store login credentials securely. Store personalized user data including their assignments, goals and progress towards them, and their gospel study plan. 
-- **WebSocket** - Description here
+- **WebSocket** - New assignments or adjusted due dates are updated immediately on the webpage. Possibly (time permitting) display grades of assignments as they are graded. 
 
 ## 🚀 AWS deliverable
 
