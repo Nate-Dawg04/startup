@@ -18,32 +18,34 @@ Frustrated with switching between Learning Suite, Canvas, and a thousand other p
 
 ### Design
 
+Here's a few pictures demonstrating a basic design as well as some of the features:
+
 ![Design image](placeholder.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Secure login to access your personal dashboard
+- All homework assignments displayed in one place and ranked by priority
+- Task manager for any other non-school related tasks
+- Personal goals tracker with progress indicators
+- Customizable gospel study plan on a week by week basis
+- Suggested goals from ChatGPT
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
+- **HTML** - Give the structure of the entire application. Multiple HTML pages, including one for login, one for the main dashboard, another for tracking goals, and another for gospel study plans. 
+- **CSS** - Provide style to the website with a good color scheme, fonts, and use of whitespace. 
+- **React** - Display assignment status including the due date and submission status. Allow users to add, edit, and delete tasks and goals. Shows progress towards goals and gospel study plan. 
+- **Service** - Backend service with endpoints for the following:
+    - Retrieving assignments and updating their status
+    - Login and logout functionality
+    - Suggest goals using ChatGPT API
+    - Send notifications for upcoming assignments and tasks
+- **DB/Login** - Store login credentials securely. Store personalized user data including their assignments, goals and progress towards them, and their gospel study plan. 
 - **WebSocket** - Description here
 
 ## 🚀 AWS deliverable
