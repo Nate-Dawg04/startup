@@ -46,7 +46,7 @@ I am going to use the required technologies in the following ways:
     - Suggest goals using ChatGPT API
     - Send notifications for upcoming assignments and tasks
 - **DB/Login** - Store login credentials securely. Store personalized user data including their assignments, goals and progress towards them, and their gospel study plan. 
-- **WebSocket** - New assignments or adjusted due dates are updated immediately on the webpage. Possibly (time permitting) display grades of assignments as they are graded. 
+- **WebSocket** - New assignments or adjusted due dates are updated immediately on the webpage. _Possibly (time permitting) display grades of assignments as they are graded._
 
 ## 🚀 AWS deliverable
 
