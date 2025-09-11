@@ -45,7 +45,7 @@ Here's a sketch demonstrating a basic design including some of the features:
 
 ### Technologies
 
-I am going to use the required technologies in the following ways:
+I will use the required technologies in the following ways:
 
 - **HTML** - Give the structure of the entire application. Multiple HTML pages, including one for login, one for the main dashboard, another for tracking goals, and another for gospel study plans. 
 - **CSS** - Provide style to the website with a good color scheme, fonts, and use of whitespace. 
