@@ -62,7 +62,7 @@ I will use the required technologies in the following ways:
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Server deployed and accessible with custom domain name** - [My server link](https://yourdomainnamehere.click).
+- [X] **Server deployed and accessible with custom domain name** - [My server link](https://procrastinot.click).
 
 ## 🚀 HTML deliverable
 
