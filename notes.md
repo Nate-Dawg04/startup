@@ -44,12 +44,8 @@ My key pair is called "WebKey.pem" and is saved in my Downloads folder
 ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
 ```
 
-[!IMPORTANT]
-```
-**Instance type:** t3.micro\
-**AMI ID:** ami-018f3a022e128a6b2\
-**Launch Time:** Wed Sep 10 2025 10:44:57
-```
+> [!IMPORTANT]
+> **Instance type:** t3.micro\ **AMI ID:** ami-018f3a022e128a6b2\ **Launch Time:** Wed Sep 10 2025 10:44:57
 
 Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
 
