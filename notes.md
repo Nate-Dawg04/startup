@@ -60,7 +60,7 @@ View negotation that happens with TLS example:
 curl -v -s https://byu.edu > /dev/null
 ```
 Visual Diagram:
-![Design image](DesignSketch.jpg)
+![Certification Example](CertificationExample.jpg)
 
 
 Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
