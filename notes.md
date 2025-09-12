@@ -62,7 +62,6 @@ View negotation that happens with TLS example:
 ```
 curl -v -s https://byu.edu > /dev/null
 ```
-Visual Diagram:
 ![Certification Example](CertificationExample.jpg)
 
 Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
@@ -71,6 +70,23 @@ Launching my AMI I initially put it on a private subnet. Even though it had a pu
 Caddy is a web service that listens for incoming HTTP requests. Caddy then either serves up the requested static files or routes the request to another web service. This ability to route requests is called a gateway, or reverse proxy, and allows you to expose multiple web services (i.e. your project services) as a single external web service (i.e. Caddy).
 
 ![Caddy Diagram](https://github.com/webprogramming260/.github/blob/main/profile/webServers/caddy/webServersCaddy.jpg)
+
+Configuring Caddy:
+```
+ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
+cd ~
+vi Caddyfile
+# opens a text editor, where you chagne the port 80 (HTTP) to my domain name
+sudo service caddy restart # restarts Caddy to implement changes and requires sudo (super user do) to elevate user for required rights
+```
+
+A proxy server acts as an intermediary between a client and a server. It handles requests and responses, often providing benefits like security, anonymity, load balancing, and caching.
+
+A forward proxy sits in front of the client, forwards client requests to eternal servers, and is used for content filtering, hiding client identity, or bypassing restrictions
+
+A reverse proxy sits in front of the server, handles incoming client requests and routes them to internal servers, and is used for load balancing, SSL termination, caching, and hiding backend architecture
+
+![Forward and Reverse Proxy](https://github.com/webprogramming260/.github/blob/main/profile/webServers/caddy/proxyServers.png)
 
 ## HTML
 
