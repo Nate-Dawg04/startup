@@ -76,8 +76,10 @@ Configuring Caddy:
 ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
 cd ~
 vi Caddyfile
-# opens a text editor, where you chagne the port 80 (HTTP) to my domain name
-sudo service caddy restart # restarts Caddy to implement changes and requires sudo (super user do) to elevate user for required rights
+# opens a text editor, where you change the port 80 (HTTP) to my domain name
+
+sudo service caddy restart
+# restarts Caddy to implement changes and requires sudo (super user do) to elevate user for required rights
 ```
 
 A proxy server acts as an intermediary between a client and a server. It handles requests and responses, often providing benefits like security, anonymity, load balancing, and caching.
