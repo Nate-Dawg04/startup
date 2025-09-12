@@ -51,6 +51,14 @@ ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
 > 
 > **Launch Time:** Wed Sep 10 2025 10:44:57
 
+### HTTPS and TLS
+HTTP -> Non-secure Hypertext Transport Protocol
+HTTPS -> Secure Hypertext Transport Protocol
+
+View negotation that happens with TLS example:
+```curl -v -s https://byu.edu > /dev/null
+```
+
 Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
 
 ## Caddy
