@@ -55,6 +55,9 @@ ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
 **HTTP** -> Non-secure Hypertext Transport Protocol\
 **HTTPS** -> Secure Hypertext Transport Protocol
 
+
+*Let's Encrypt* and the IETF standard ACME protocol that they pioneered allow anyone who owns a domain name to dynamically generate and renew a certificate for free.
+
 View negotation that happens with TLS example:
 ```
 curl -v -s https://byu.edu > /dev/null
