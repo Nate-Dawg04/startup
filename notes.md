@@ -68,8 +68,9 @@ Visual Diagram:
 Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
 
 ## Caddy
+Caddy is a web service that listens for incoming HTTP requests. Caddy then either serves up the requested static files or routes the request to another web service. This ability to route requests is called a gateway, or reverse proxy, and allows you to expose multiple web services (i.e. your project services) as a single external web service (i.e. Caddy).
 
-No problems worked just like it said in the [instruction](https://github.com/webprogramming260/.github/blob/main/profile/webServers/https/https.md).
+![Caddy Diagram](https://github.com/webprogramming260/.github/blob/main/profile/webServers/caddy/webServersCaddy.jpg)
 
 ## HTML
 
