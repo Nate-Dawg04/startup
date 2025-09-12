@@ -1,6 +1,6 @@
 # CS 260 Notes
 
-[My startup - Simon](website link here)
+[My startup - Procrastinot](http://52.71.57.242)
 
 ## Helpful links
 
@@ -39,7 +39,7 @@ git commit -am              //same as last one but also adds the files to the pu
 My IP address is: *52.71.57.242*
 My key pair is called "WebKey.pem" and is saved in my Downloads folder
 
-# Command to remove shell into my server:
+### Command to remove shell into my server:
 ```
 ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
 ```
