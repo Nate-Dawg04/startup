@@ -36,7 +36,14 @@ git commit -am              //same as last one but also adds the files to the pu
 
 ## AWS
 
-My IP address is: 54.81.96.130
+My IP address is: *52.71.57.242*
+My key pair is called "WebKey.pem" and is saved in my Downloads folder
+
+# Command to remove shell into my server:
+```
+ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
+```
+
 Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
 
 ## Caddy
