@@ -96,7 +96,44 @@ HyperText Markup Language **(HTML)**
 
 HTML elements are represented with enclosing tags that may enclose other elements or text. For example, the paragraph element, and its associated tag (p), designate that the text is a structural paragraph of text. When we talk about tags we are referring to a delimited textual name that we use to designate the start and end of an HTML element as it appears in an HTML document. Tags are delimited with the less than (<) and greater than (>) symbols. A closing tag will also have a forward slash (/) before its name.
 
+Tags can have attributes that modify behavior or provide data
+
 ## CSS
+
+Cascading Style Sheets **(CSS)**
+With CSS a web programmer can animate the page, deploy custom fonts, respond to user actions, and dynamically alter the entire layout of the page based on the size of a device and its orientation.
+
+Functionally, CSS is primarily concerned with defining rulesets, or simply rules. A rule is comprised of a selector that selects the elements to apply the rule to, and one or more declarations that represent the property to style with the given property value.
+
+![Css Website Rules](https://github.com/webprogramming260/.github/blob/main/profile/css/introduction/cssDefinitions.jpg?raw=true)
+
+## Associating CSS with HTML
+1. Use the style attribute of an HTML element and explicitly assign one or more declarations.
+```
+<p style="color:green">CSS</p>
+```
+2. Use the HTML style element to define CSS rules within the HTML document. The style element should appear in the head element of the document so that the rules apply to all elements of the document.
+```
+<head>
+  <style>
+    p {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <p>CSS</p>
+</body>
+```
+3. Use the HTML link element to create a hyperlink reference to an external file containing CSS rules. The link element must appear in the head element of the document.
+```
+<link rel="stylesheet" href="styles.css" />
+```
+
+All of the above examples are equivalent, but using the link element usually is the preferred way to define CSS.
+
+
+------------Default Stuff_______
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
 
