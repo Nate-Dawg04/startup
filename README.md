@@ -71,12 +71,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [X] **HTML pages** - 5 HTML Pages for all the different parts of my website 
 - [X] **Proper HTML element usage** - I used a variety of different elements to create the desired structure
 - [X] **Links** - The Navigation bar links between the different pages
-- [ ] **Text** - I did not complete this part of the deliverable.
+- [X] **Text** - Text displayed on multiple pages, especially the home page
 - [X] **3rd party API placeholder** - Created spot for ChatGPT 3rd party API on the Goals page
 - [ ] **Images** - I did not complete this part of the deliverable.
 - [X] **Login placeholder** - Login placeholders on the opening page and navigates to home page when submit is clicked
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [X] **WebSocket placeholder** - Indicated spot where WebSocket data will be displayed (live assignments and due dates)
+- [X] **DB data placeholder** - DB data will be used to store personalized user data (assignments, etc.)
+- [X] **WebSocket placeholder** - Indicated spot where WebSocket data will be displayed (live assignments and due dates), see trending things that are being studied by others worldwide
 
 ## 🚀 CSS deliverable
 
