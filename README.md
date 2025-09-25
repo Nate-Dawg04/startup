@@ -73,7 +73,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [X] **Links** - The Navigation bar links between the different pages
 - [X] **Text** - Text displayed on multiple pages, especially the home page
 - [X] **3rd party API placeholder** - Created spot for ChatGPT 3rd party API on the Goals page
-- [ ] **Images** - I did not complete this part of the deliverable.
+- [X] **Images** - Pres Nelson!
 - [X] **Login placeholder** - Login placeholders on the opening page and navigates to home page when submit is clicked
 - [X] **DB data placeholder** - DB data will be used to store personalized user data (assignments, etc.)
 - [X] **WebSocket placeholder** - Indicated spot where WebSocket data will be displayed (live assignments and due dates), see trending things that are being studied by others worldwide
