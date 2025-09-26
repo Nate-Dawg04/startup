@@ -98,6 +98,10 @@ HTML elements are represented with enclosing tags that may enclose other element
 
 Tags can have attributes that modify behavior or provide data
 
+HTML defines a header ```(<!DOCTYPE html>)``` that tells the browser the type and version of the document. You should always include this at the top of the HTML file.
+
+The two major purposes of HTML is to provide structure and content to your web application. Some of the common HTML structural elements include body, header, footer, main, section, aside, p, table, ol/ul, div, and span
+
 ## CSS
 
 Cascading Style Sheets **(CSS)**
