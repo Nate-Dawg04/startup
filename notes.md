@@ -158,15 +158,24 @@ body {
 }
 ```
 
-**2. Combinators**
+"*" is the the wildcard element name selector
 
-**3. Class Selector**
+**2. Combinators**  
 
-**4. ID Selector**
+Types of Combinators
+**Descendant** ->	A list of descendants ->	```body section``` ->	Any section that is a descendant of a body
+**Child** -> A list of direct children ->	```section > p``` -> Any p that is a direct child of a section
+**General sibling** -> A list of siblings -> ```div ~ p``` ->	Any p that has a div sibling
+**Adjacent sibling** ->	A list of adjacent sibling ->	```div + p``` ->	Any p that has an adjacent div sibling
 
-**5. Attribute Selector**
+**3. Class Selector**  
 
-**6. Pseudo Selector**
+**4. ID Selector**  
+
+**5. Attribute Selector**  
+
+**6. Pseudo Selector**  
+
 
 
 
