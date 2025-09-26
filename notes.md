@@ -144,6 +144,31 @@ CSS defines everything as boxes. When you apply styles, you are applying them to
 **Next Box** - Border (has properties like color, thickness and line)
 **Margin** - considered external to the actual styling of hte box and therefore only represents whitespace
 
+## Selectors
+Selectors are used to select the elements that a CSS Rule applies to.
+Here are the different forms:
+**1. Element Type Selector**
+Selects a 
+Selects an element (like <body>) and cascades teh declaration down to all the children of the body, which is the whole document.
+Example:
+```
+body {
+  font-family: sans-serif;
+}
+```
+
+**2. Combinators**
+
+**3. Class Selector**
+
+**4. ID Selector**
+
+**5. Attribute Selector**
+
+**6. Pseudo Selector**
+
+
+
 ------------Default Stuff---------------------
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
