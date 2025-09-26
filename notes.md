@@ -102,6 +102,8 @@ HTML defines a header ```(<!DOCTYPE html>)``` that tells the browser the type an
 
 The two major purposes of HTML is to provide structure and content to your web application. Some of the common HTML structural elements include body, header, footer, main, section, aside, p, table, ol/ul, div, and span
 
+Creating everything for the HTML Files was honestly a bit tedious and not the most exciting. Very practical though.
+
 ## CSS
 
 Cascading Style Sheets **(CSS)**
@@ -136,8 +138,13 @@ Functionally, CSS is primarily concerned with defining rulesets, or simply rules
 
 All of the above examples are equivalent, but using the link element usually is the preferred way to define CSS.
 
+CSS defines everything as boxes. When you apply styles, you are applying them to a region of the display that is a rectangular box. Within an element's box there are several internal boxes:
+**Innermost Box** - Element's content (text or image of an element, etc. is displayed)
+**Next Box** - Padding (inherits things like the background color)
+**Next Box** - Border (has properties like color, thickness and line)
+**Margin** - considered external to the actual styling of hte box and therefore only represents whitespace
 
-------------Default Stuff_______
+------------Default Stuff---------------------
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
 
