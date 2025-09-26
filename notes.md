@@ -178,7 +178,11 @@ h2 ~ p {
 
 **3. Class Selector**  
 Any element can have zero or more classifications applied to it. If our document has a class of ```introduction``` applied to the first paragraph, and a class of ```summary``` applied to the final paragraph of each section. If we want to bold the summary paragraphs we would supply the class name summary prefixed with a period (```.summary```).
-
+```
+.summary {
+  font-weight: bold;
+}
+```
 
 **4. ID Selector**  
 ID selectors reference the ID of an element. All IDs should be unique within an HTML document and so this select targets a specific element. To use the ID selector you prefix the ID with the hash symbol (#)  
@@ -208,7 +212,13 @@ section:hover {
 }
 ```
 
+## Declarations
+CSS rule declarations specify a property and value to assign when the rule selector matches one or more elements. There are many many different possible properties
+There are many different units to use to define size, as well as multiple ways to describe color
 
+
+## Responsive Design
+Modern web applications must adapt to many devices, which is achieved through responsive design—adjusting layouts based on screen size and orientation. While HTML and CSS are naturally flexible, properties like display (e.g., none, block, inline, flex, grid) allow control of how elements are rendered. The viewport meta tag ensure pages display correctly on mobile devices, and the float property allows text to wrap around elements. Media queries make it possible to dynamically change styles depending on device conditions like orientation. 
 ------------Default Stuff---------------------
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
