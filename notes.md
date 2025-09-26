@@ -147,7 +147,8 @@ CSS defines everything as boxes. When you apply styles, you are applying them to
 ## Selectors
 Selectors are used to select the elements that a CSS Rule applies to.
 Here are the different forms:
-**1. Element Type Selector**
+
+**1. Element Type Selector**  
 Selects a 
 Selects an element (like <body>) and cascades teh declaration down to all the children of the body, which is the whole document.
 Example:
