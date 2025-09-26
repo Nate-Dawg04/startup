@@ -162,21 +162,51 @@ body {
 
 **2. Combinators**  
 
-Types of Combinators
-**Descendant** ->	A list of descendants ->	```body section``` ->	Any section that is a descendant of a body
-**Child** -> A list of direct children ->	```section > p``` -> Any p that is a direct child of a section
-**General sibling** -> A list of siblings -> ```div ~ p``` ->	Any p that has a div sibling
+Types of Combinators:  
+**Descendant** ->	A list of descendants ->	```body section``` ->	Any section that is a descendant of a body  
+**Child** -> A list of direct children ->	```section > p``` -> Any p that is a direct child of a section  
+**General sibling** -> A list of siblings -> ```div ~ p``` ->	Any p that has a div sibling  
 **Adjacent sibling** ->	A list of adjacent sibling ->	```div + p``` ->	Any p that has an adjacent div sibling
 
+Example:  
+We can use the general sibling combinator to increase the whitespace padding on the left of paragraphs that are siblings of a level two heading.
+```
+h2 ~ p {
+  padding-left: 0.5em;
+}
+```
+
 **3. Class Selector**  
+Any element can have zero or more classifications applied to it. If our document has a class of ```introduction``` applied to the first paragraph, and a class of ```summary``` applied to the final paragraph of each section. If we want to bold the summary paragraphs we would supply the class name summary prefixed with a period (```.summary```).
+
 
 **4. ID Selector**  
+ID selectors reference the ID of an element. All IDs should be unique within an HTML document and so this select targets a specific element. To use the ID selector you prefix the ID with the hash symbol (#)  
+Example:
+```
+#physics {
+  border-left: solid 1em purple;
+}
+```
 
 **5. Attribute Selector**  
+Attribute selectors allow you to select elements based upon their attributes. You use an attribute selector to select any element with a given attribute (```a[href]```)  
+Example:  
+```
+p[class='summary'] {
+  color: red;
+}
+```
 
 **6. Pseudo Selector**  
-
-
+CSS also defines a significant list of pseudo selectors which select based on positional relationships, mouse interactions, hyperlink visitation states, and attributes.   
+Example:
+(Change our ID selector to select whenever a section is hovered over.)
+```
+section:hover {
+  border-left: solid 1em purple;
+}
+```
 
 
 ------------Default Stuff---------------------
