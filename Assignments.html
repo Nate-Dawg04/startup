@@ -11,7 +11,7 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <h1>Procrastinot!</h1>
     <header>
         <ul class="nav nav-tabs">
@@ -35,10 +35,11 @@
         <hr />
     </header>
 
-    <main>
+    <main class="flex-grow-1 container my-5">
+        <h1>Assignments</h1>
         <div class="row">
             <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                <h1>Assignments</h1>
+
                 <div class="table-responsive w-auto">
                     <table class="table table-striped table-hover">
                         <thead>
@@ -73,16 +74,25 @@
             </div>
 
             <div class="col-12 col-lg-6">
-                <header>Add New Assignment:</header>
+                <h2 class="alternate">Add New Assignment:</h2>
                 <form>
-                    <label for="AssignmentClass">Class:</label><br>
-                    <input type="text" id="AssignmentClass" name="AssignmentClass" value="HIST 201"><br>
-                    <label for="AssignmentName">Assignment Name:</label><br>
-                    <input type="text" id="AssignmentName" name="AssignmentName" value="Research Paper"><br>
-                    <label for="AssignmentDueDate">Due Date:</label><br>
-                    <input type="date" id="AssignmentDueDate" name="AssignmentDueDate" value="2025-09-25"><br><br>
-                    <input type="submit" value="Submit">
-                    <input type="reset" value="Reset">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Class</span>
+                        <input type="text" class="form-control" placeholder="MATH 215" aria-label="Username"
+                            aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Assignment</span>
+                        <input type="text" class="form-control" placeholder="Research Paper" aria-label="Username"
+                            aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon-date">Due Date</span>
+                        <input type="date" class="form-control" aria-label="Due Date"
+                            aria-describedby="basic-addon-date">
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                    <input class="btn btn-secondary" type="reset" value="Reset">
                 </form>
             </div>
         </div>
