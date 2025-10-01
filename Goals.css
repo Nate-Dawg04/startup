@@ -1,0 +1,10 @@
+/* Make progress bars taller */
+.progress {
+    width: 200px !important;
+    /* adjust to your preferred height */
+}
+
+/* Ensure progress column takes more space on bigger screens but shrinks on small screens */
+.progress-cell {
+    min-width: 1000px !important;
+}

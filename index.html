@@ -34,20 +34,17 @@
         </ul>
     </header>
 
-    <main class="flex-grow-1 container-fluid text-center">
+    <main <main class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 10vh;">
         <h1>Login Page</h1>
         <form method="get" action="Home.html">
-            <div class="row mb-3">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3">
-                </div>
+            <div class="mb-3">
+                <label for="inputEmail3" class="form-label">Email</label>
+                <input type="email" class="form-control" id="inputEmail3">
             </div>
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword3">
-                </div>
+
+            <div class="mb-3">
+                <label for="inputPassword3" class="form-label">Password</label>
+                <input type="password" class="form-control" id="inputPassword3">
             </div>
             <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
