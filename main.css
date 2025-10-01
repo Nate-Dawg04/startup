@@ -11,6 +11,7 @@ h1 {
 
 header {
     flex: 0 80px;
+    background-color: #9ba17f;
 }
 
 main {
@@ -19,10 +20,12 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    background-color: #e8e4db;
 }
 
 footer {
     flex: 0 30px;
+    background-color: #c9c1ae;
 }
 
 ul {
@@ -30,4 +33,19 @@ ul {
     display: flex;
     flex-direction: row !important;
     list-style: none;
+}
+
+/* Active tab */
+.nav-tabs .nav-link.active {
+    background-color: #e8e4db !important;
+    color: #004007 !important;
+    border-bottom: none !important;
+}
+
+.nav-tabs .nav-link {
+    color: #3b3b3b;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #004007;
 }
