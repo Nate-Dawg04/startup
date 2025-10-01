@@ -35,30 +35,43 @@
         <hr />
     </header>
 
-    <main>
+    <main class="container-fluid bg-secondary text-center">
         <h1>Login Page</h1>
         <form method="get" action="Home.html">
-            <div>
-                <span>Email</span>
-                <input type="text" placeholder="your@email.com" />
+            <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="inputEmail3">
+                </div>
             </div>
-            <div>
-                <span>Password</span>
-                <input type="password" placeholder="password" />
+            <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="inputPassword3">
+                </div>
             </div>
-            <button type="submit">Login</button>
-            <button type="submit">Create</button>
+            <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
     </main>
 
 
-
-    <footer>
-        <hr />
-        <span>Startup Repository (Nathan Brady):</span>
-        <br />
-        <a href="https://github.com/Nate-Dawg04/startup.git">GitHub</a>
+    <footer class="bg-light text-dark mt-auto py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Left side -->
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5>Startup Repository (Nathan Brady)</h5>
+                    <a class="mb-0" href="https://github.com/Nate-Dawg04/startup.git">Source (Github)</a>
+                </div>
+            </div>
+        </div>
     </footer>
+    <!-- <footer class="bg-dark text-white-50">
+        <div class="container-fluid">
+            <span class="author">Startup Repository (Nathan Brady):</span>
+            <a href="https://github.com/Nate-Dawg04/startup.git">Source (Github)</a>
+        </div>
+    </footer> -->
 </body>
 
 </html>
