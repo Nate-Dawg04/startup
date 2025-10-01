@@ -8,6 +8,11 @@
 - [Canvas](https://byu.instructure.com)
 - [MDN](https://developer.mozilla.org)
 
+# Deploy Changes to Production Environment
+```
+./deployFiles.sh -k ~/Downloads/WebKey.pem -h procrastinot.click  -s startup
+```
+
 # Git + Workflow Help
 ## Workflow
 ```
