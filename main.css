@@ -55,3 +55,8 @@ ul {
         transform: rotate(270deg);
     }
 }
+
+h1.mainName {
+    padding: 10px;
+    font-size: 5vh;
+}
