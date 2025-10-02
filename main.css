@@ -14,6 +14,7 @@ header {
 }
 
 main {
+    padding: 20px;
     flex: 1 calc(10vh - 10px);
     display: flex;
     flex-direction: column;

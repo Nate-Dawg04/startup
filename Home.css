@@ -13,3 +13,27 @@ p.SnapshotData {
     padding: 20px;
     text-align: center;
 }
+
+.slide-in {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide-in img {
+    transform: translateX(-100%);
+    animation: slideFromLeft 1s forwards ease-out;
+}
+
+@keyframes slideFromLeft {
+    to {
+        transform: translateX(0);
+    }
+}
+
+p.presNelson {
+    text-align: center;
+    font-style: italic;
+    padding: 10px;
+}
