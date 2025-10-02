@@ -21,3 +21,7 @@ label.goalLabel {
     font-size: 20px;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
+
+div.row {
+    padding-bottom: 50px;
+}
