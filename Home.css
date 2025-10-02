@@ -1,3 +1,4 @@
+/* Headers above the 3 snapshots */
 header.Snapshots {
     padding: 10px;
     font-weight: bold;
@@ -5,15 +6,18 @@ header.Snapshots {
     font-size: 20px;
 }
 
+/* Welcome text at the top */
 section.welcome {
     padding: 20px;
 }
 
+/* Placeholders for the snapshots that will be added later */
 p.SnapshotData {
     padding: 20px;
     text-align: center;
 }
 
+/* Animation for the picture */
 .slide-in {
     overflow: hidden;
     display: flex;
@@ -32,6 +36,7 @@ p.SnapshotData {
     }
 }
 
+/* Text underneath the picture */
 p.presNelson {
     text-align: center;
     font-style: italic;

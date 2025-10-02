@@ -1,11 +1,9 @@
+/* Progress Bars */
 .progress {
     width: 200px !important;
 }
 
-.progress-cell {
-    min-width: 1000px !important;
-}
-
+/* Header for the "Goal Ideas" section */
 h2.GoalIdeas {
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
@@ -16,12 +14,14 @@ h2.GoalIdeas {
     background-color: #c9c1ae;
 }
 
+/* Label above the create new goal column */
 label.goalLabel {
     font-weight: bold;
     font-size: 20px;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* Add padding at the bottom of the page (was uncomfortably close for some reason) */
 div.row {
     padding-bottom: 50px;
 }

@@ -1,7 +1,9 @@
+/* "Week Plan" Header above the left column */
 h3.WeekPlan {
     text-align: center;
 }
 
+/* Placeholders for APIs and things being added in the future */
 p.placeholders {
     padding: 10px;
     font-style: italic;
