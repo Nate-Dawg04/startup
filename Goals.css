@@ -1,10 +1,17 @@
-/* Make progress bars taller */
 .progress {
     width: 200px !important;
-    /* adjust to your preferred height */
 }
 
-/* Ensure progress column takes more space on bigger screens but shrinks on small screens */
 .progress-cell {
     min-width: 1000px !important;
+}
+
+h2.GoalIdeas {
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 2px dotted #333;
+    padding: 5px;
+    background-color: #c9c1ae;
 }

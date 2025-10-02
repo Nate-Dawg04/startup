@@ -1,0 +1,15 @@
+header.Snapshots {
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+}
+
+section.welcome {
+    padding: 20px;
+}
+
+p.SnapshotData {
+    padding: 20px;
+    text-align: center;
+}
