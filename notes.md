@@ -245,6 +245,40 @@ root.render(<Hello phrase="cs260" />);
 
 ## React Part 1: Routing
 
+### Installing and Configuring Vite and React  
+'''
+npm init -y
+npm install vite@latest -D
+'''
+
+Replace in the "scripts" section in the package.json file:  
+'''
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+'''
+
+Note: also add node_modules to the .gitignore file. 
+
+### Reorganize code  
+
+Then reorganize the code to be what Vite expects, which is a public directory that is going to hold all the application image and sound assets, and a src directory for all of the React code.  
+
+Also put main.css (after renaming to app.css) in the src directory
+
+### Convert to React Bootstrap. 
+'''
+npm install bootstrap react-bootstrap
+'''
+
+This then allows you to refer to the Bootstrap files in any component by using:  
+'''
+import 'bootstrap/dist/css/bootstrap.min.css';
+'''
+
+
 Setting up Vite and React was pretty simple. I had a bit of trouble because of conflicting CSS. This isn't as straight forward as you would find with Svelte or Vue, but I made it work in the end. If there was a ton of CSS it would be a real problem. It sure was nice to have the code structured in a more usable way.
 
 ## React Part 2: Reactivity
