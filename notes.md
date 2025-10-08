@@ -227,7 +227,7 @@ Modern web applications must adapt to many devices, which is achieved through re
 
 # React and JavaScript  
 
-'''
+```
 const Hello = ({ phrase }) => {
   return (
     <div>
@@ -238,27 +238,24 @@ const Hello = ({ phrase }) => {
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render(<Hello phrase="cs260" />);
-'''
-
-
-------------Default Stuff---------------------
+```
 
 ## React Part 1: Routing
 
 ### Installing and Configuring Vite and React  
-'''
+```
 npm init -y
 npm install vite@latest -D
-'''
+```
 
 Replace in the "scripts" section in the package.json file:  
-'''
+```
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   }
-'''
+```
 
 Note: also add node_modules to the .gitignore file. 
 
@@ -269,15 +266,55 @@ Then reorganize the code to be what Vite expects, which is a public directory th
 Also put main.css (after renaming to app.css) in the src directory
 
 ### Convert to React Bootstrap. 
-'''
+```
 npm install bootstrap react-bootstrap
-'''
+```
 
 This then allows you to refer to the Bootstrap files in any component by using:  
-'''
+```
 import 'bootstrap/dist/css/bootstrap.min.css';
-'''
+```
 
+### Enable React
+```
+npm install react react-dom react-router-dom
+```
+
+Then, create a new index.html that represents the React SPA entry point, such as:  
+```
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+
+    <title>Simon React</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
+  </body>
+</html>
+```
+
+Notice that the div with an ID of root is where all the content will be injected. The script reference for index.jsx causes the injection of the top level component named App. To hook the index.html to our top level App component, we create the following index.jsx file.  
+```
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './src/app';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+Note that both the index.html and the index.jsx are located in the root of your project.
+
+
+
+
+------------Default Stuff---------------------
 
 Setting up Vite and React was pretty simple. I had a bit of trouble because of conflicting CSS. This isn't as straight forward as you would find with Svelte or Vue, but I made it work in the end. If there was a ton of CSS it would be a real problem. It sure was nice to have the code structured in a more usable way.
 
