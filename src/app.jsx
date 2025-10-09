@@ -11,7 +11,7 @@ import { Login } from './Login/Login';
 export default function App() {
     return (
         <BrowserRouter>
-            <body className="d-flex flex-column min-vh-100">
+            <div className="body d-flex flex-column min-vh-100">
                 <header>
                     <h1 className="mainName">Procrastinot!</h1>
 
@@ -68,7 +68,7 @@ export default function App() {
                         </div>
                     </div>
                 </footer>
-            </body>
+            </div>
         </BrowserRouter>
     );
 }

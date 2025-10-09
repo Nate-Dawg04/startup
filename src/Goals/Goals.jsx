@@ -28,7 +28,7 @@ export function Goals() {
                                         <td>
                                             <div className="progress" role="progressbar" aria-label="Success example"
                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                <div className="progress-bar bg-success" style="width: 25%"></div>
+                                                <div className="progress-bar bg-success" style={{ width: '25%' }}></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -40,7 +40,7 @@ export function Goals() {
                                         <td>
                                             <div className="progress" role="progressbar" aria-label="Success example"
                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                <div className="progress-bar bg-success" style="width: 75%"></div>
+                                                <div className="progress-bar bg-success" style={{ width: '75%' }}></div>
                                             </div>
                                         </td>
                                     </tr>
