@@ -240,6 +240,85 @@ const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render(<Hello phrase="cs260" />);
 ```
 
+## Other Stuff
+
+### Node.js
+	•	Was created by Ryan Dahl in 2009.
+	•	It lets JavaScript run outside the browser—i.e. on the server.
+	•	Node wraps the V8 JS engine (same engine used in Chrome) so JS can be executed from the terminal / server.
+	•	Having JS on both client and server can let your stack use one language “full-stack.”
+
+  You can run JS expressions directly from the terminal using node -e "...". or run a full JS file:  
+  ```
+  node index.js
+  ```
+
+### Node Package Manager (npm)  
+	•	npm comes bundled with Node.
+	•	Initializing a project: Run npm init or npm init -y to generate a package.json file.
+	•	package.json: stores metadata (name, version), dependencies, and scripts.
+
+Installing packages:  
+```
+npm install <package-name>
+```
+
+node_modules should be in .gitignore because it can be rebuilt from package.json and package-lock.json.
+
+**Main steps:**. 
+1. Create your project directory  
+2. Initialize it for use with NPM by running npm init -y  
+3. Make sure .gitignore file contains node_modules  
+4. Install any desired packages with npm install <package name here>  
+5. Add require('<package name here>') to your application's JavaScript  
+6. Use the code the package provides in your JavaScript  
+7. Run your code with node index.js  
+
+
+### Javascript Notes  
+	•	Functions are first-class: they can be stored in variables, passed as arguments, or returned from other functions.
+	•	Return values: if no return statement is used, the function returns undefined.
+	•	Parameters: missing parameters become undefined. You can give parameters default values (e.g., function f(x = 0)).
+	•	Anonymous functions: functions can be created without names and assigned to variables or passed directly.
+	•	Higher-order functions: functions that take or return other functions (foundation of functional programming).
+	•	Nested functions: functions can be defined inside others; inner functions have access to the outer scope (closures).
+
+**Arrow Functions**  
+# JavaScript Arrow Functions — CS260 Summary
+
+## Overview
+- Arrow functions provide a shorter syntax for defining functions in JavaScript.
+- They **do not** bind their own `this`, `arguments`, `super`, or `new.target`; instead, they capture them from the surrounding (lexical) scope.
+- Great for concise callbacks, array methods, and preserving `this` in nested functions.
+
+---
+
+## Syntax and Examples
+
+| Use Case | Example | Notes |
+|-----------|----------|-------|
+| Basic form | `(x, y) => x + y` | Implicitly returns the expression result. |
+| Single parameter | `x => x * 2` | Parentheses optional with one parameter. |
+| No parameters | `() => 42` | Must use empty parentheses. |
+| Multiple statements | `(a, b) => { const sum = a + b; return sum; }` | Use braces and `return` when more than one statement. |
+| Returning an object | `() => ({ count: 0 })` | Wrap object in parentheses to avoid being treated as a block. |
+
+---
+
+## Lexical `this` Example
+
+Unlike traditional functions, arrow functions inherit `this` from their enclosing scope.
+
+```js
+function Counter() {
+  this.count = 0;
+  setInterval(() => {
+    this.count++; // `this` refers to the Counter instance
+    console.log(this.count);
+  }, 1000);
+}
+```
+
 ## React Part 1: Routing
 
 ### Installing and Configuring Vite and React  
@@ -309,7 +388,7 @@ import App from './src/app';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
 ```
-Note that both the index.html and the index.jsx are located in the root of your project.
+Note that both the index.html and the index.jsx are located in the root of the project.
 
 
 
