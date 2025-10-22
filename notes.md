@@ -283,8 +283,7 @@ node_modules should be in .gitignore because it can be rebuilt from package.json
 	•	Higher-order functions: functions that take or return other functions (foundation of functional programming).
 	•	Nested functions: functions can be defined inside others; inner functions have access to the outer scope (closures).
 
-**Arrow Functions**  
-# JavaScript Arrow Functions — CS260 Summary
+# **Arrow Functions**  
 
 ## Overview
 - Arrow functions provide a shorter syntax for defining functions in JavaScript.
@@ -391,36 +390,234 @@ root.render(<App />);
 Note that both the index.html and the index.jsx are located in the root of the project.
 
 
+# Midterm 1 Study Guide #
 
+---
 
-------------Default Stuff---------------------
+## HTML Fundamentals
 
-Setting up Vite and React was pretty simple. I had a bit of trouble because of conflicting CSS. This isn't as straight forward as you would find with Svelte or Vue, but I made it work in the end. If there was a ton of CSS it would be a real problem. It sure was nice to have the code structured in a more usable way.
+### Declaring Document Type
+```html
+<!DOCTYPE html>
+```
 
-## React Part 2: Reactivity
+### Common HTML Tags
+| Type | Tag |
+|------|-----|
+| Paragraph | `<p>` |
+| Ordered list | `<ol>` |
+| Unordered list | `<ul>` |
+| Heading 1 | `<h1>` |
+| Heading 2 | `<h2>` |
+| Heading 3 | `<h3>` |
 
-This was a lot of fun to see it all come together. I had to keep remembering to use React state instead of just manipulating the DOM directly.
-
-Handling the toggling of the checkboxes was particularly interesting.
-
-```jsx
-<div className="input-group sound-button-container">
-  {calmSoundTypes.map((sound, index) => (
-    <div key={index} className="form-check form-switch">
-      <input
-        className="form-check-input"
-        type="checkbox"
-        value={sound}
-        id={sound}
-        onChange={() => togglePlay(sound)}
-        checked={selectedSounds.includes(sound)}
-      ></input>
-      <label className="form-check-label" htmlFor={sound}>
-        {sound}
-      </label>
-    </div>
-  ))}
+### `<div>` Element
+A `<div>` is a **block-level container** used to group other HTML elements. It helps structure pages for styling and layout.
+```html
+<div class="header">
+  <p>This is inside a div</p>
 </div>
 ```
 
-This is a test line
+### `<link>` Element
+Links an external resource to an HTML document, often used for CSS.
+```html
+<link rel="stylesheet" href="styles.css">
+```
+
+### Adding an Image Hyperlink
+Wrap an image with an `<a>` tag to make it clickable.
+```html
+<a href="https://example.com">
+  <img src="images/logo.png" alt="Logo">
+</a>
+```
+
+**Folder structure example:**
+```
+project/
+  index.html
+  images/
+    logo.png
+  css/
+    styles.css
+```
+
+---
+
+## CSS Concepts
+
+### Padding vs Margin
+| Concept | Description |
+|----------|--------------|
+| Padding | Space inside the element (between content and border) |
+| Margin  | Space outside the element (between border and other elements) |
+
+Example:
+```css
+div {
+  padding: 10px 20px;
+}
+```
+
+### Box Model Structure
+```
++----------------+
+|    Margin      |
+| +------------+ |
+| |  Border    | |
+| | +--------+ | |
+| | |Padding | | |
+| | |Content | | |
+| | +--------+ | |
+| +------------+ |
++----------------+
+```
+
+### Selectors
+| Selector | Purpose |
+|-----------|----------|
+| `#title` | Selects an element by **ID** (unique) |
+| `.grid`  | Selects elements by **class** (reusable) |
+
+### Background Color Example
+```css
+div {
+  background-color: red;
+}
+```
+
+### Using Flexbox for Images
+If a container has `display: flex;`, its items (e.g., images) are displayed in a row side-by-side by default unless `flex-direction: column;` is applied.
+
+### Coloring Text via Class
+```html
+<p><span class="trouble">trouble</span> double</p>
+```
+```css
+.trouble {
+  color: green;
+}
+```
+
+---
+
+## JavaScript Basics
+
+### Including JavaScript
+```html
+<script src="script.js"></script>
+```
+
+### Conditional & Loop Syntax
+```js
+if (x > 5) { ... } else { ... }
+
+for (let i = 0; i < 3; i++) {
+  console.log(i);
+}
+
+while (condition) { ... }
+
+switch (x) {
+  case 1:
+    ...
+    break;
+  default:
+    ...
+}
+```
+
+### Arrow Function Syntax
+```js
+const add = (a, b) => a + b;
+const greet = name => `Hi ${name}`;
+const square = x => x * x;
+```
+
+### Using `.map()` with Arrays
+```js
+const numbers = [1, 2, 3];
+const doubled = numbers.map(n => n * 2);
+```
+
+### getElementById and Event Listeners
+```js
+const button = document.getElementById('myButton');
+button.addEventListener('click', () => alert('Button clicked!'));
+```
+
+### querySelector Example
+```js
+document.querySelector('#title');
+```
+
+### Modifying Styles and Text via JavaScript
+```js
+document.getElementById('byu').style.color = 'green';
+document.getElementById('animal').textContent = 'crow';
+```
+
+### JavaScript Objects
+```js
+const person = { name: "John", age: 30 };
+person.city = "Provo";
+```
+
+### JSON Overview
+```json
+{ "name": "John", "age": 25 }
+```
+
+---
+
+## Promises
+```js
+Promise.resolve('Done').then(console.log);
+Promise.reject('Error').catch(console.error);
+```
+
+---
+
+## DOM Concepts
+- DOM represents the HTML structure as a tree.
+- Each element is a node.
+- JavaScript can change structure, style, and behavior.
+
+Default display for `<span>`: **inline**.
+
+---
+
+## Terminal & System Commands
+| Command | Description |
+|----------|-------------|
+| chmod | Change permissions |
+| pwd | Print working directory |
+| cd | Change directory |
+| ls | List files |
+| vim / nano | Open text editors |
+| mkdir | Make directory |
+| mv | Move or rename a file |
+| rm | Remove a file |
+| man | Manual pages |
+| ssh | Remote shell |
+| ps | List processes |
+| wget | Download files |
+| sudo | Run as administrator |
+
+---
+
+## Network and DNS Basics
+| Concept | Value |
+|----------|-------|
+| Port 443 | HTTPS |
+| Port 80  | HTTP |
+| Port 22  | SSH |
+| HTTPS requires SSL/TLS certificate | Yes |
+| A record | Points to IP address |
+| Example Domain | banana.fruit.bozo.click |
+| TLD | .click |
+| Root Domain | bozo.click |
+| Subdomain | fruit.bozo.click |
+
+---
