@@ -621,3 +621,177 @@ Default display for `<span>`: **inline**.
 | Subdomain | fruit.bozo.click |
 
 ---
+
+
+# JavaScript Key Points Summary
+
+## 1. `var` vs `let`
+- `var` is **function-scoped** and hoisted.
+- `let` is **block-scoped** and cannot be redeclared in the same block.
+
+```javascript
+function example() {
+  if (true) {
+    var x = 1;
+    let y = 2;
+  }
+  console.log(x); // 1 (var is function-scoped)
+  // console.log(y); // Error (let is block-scoped)
+}
+```
+
+## 2. `NaN` (Not-a-Number)
+- `typeof NaN` → "number".
+- `NaN` is **never equal** to anything, even itself (`NaN === NaN` → false).
+
+```javascript
+console.log(typeof NaN); // "number"
+console.log(NaN === NaN); // false
+```
+
+## 3. Promises
+- States: **pending → fulfilled/rejected**.
+- Once fulfilled/rejected, the state is **immutable**.
+- `.then` handles fulfillment, `.catch` handles rejection.
+
+```javascript
+let p = new Promise((resolve, reject) => {
+  resolve("Done");
+});
+p.then(result => console.log(result))
+ .catch(error => console.error(error));
+```
+
+## 4. Increment Operators
+- `x++` → **postfix**, returns value then increments.
+- `++x` → **prefix**, increments first, then returns value.
+
+```javascript
+let x = 0;
+console.log(x++); // 0
+console.log(++x); // 2
+```
+
+## 5. Arrays and References
+- Arrays are **reference types**.
+- `let b = a; b.push(4)` → changes `a` as well.
+- **Shallow copy:** `let copy = [...originalArray];`
+
+```javascript
+let a = [1, 2, 3];
+let b = a;
+b.push(4);
+console.log(a); // [1, 2, 3, 4]
+
+let c = [...a]; // shallow copy
+```
+
+## 6. Floating Point Precision
+- `0.1 + 0.2 === 0.3` → false due to floating-point errors.
+
+```javascript
+console.log(0.1 + 0.2 === 0.3); // false
+```
+
+## 7. `this` Keyword
+- Regular function: `this` refers to the **object that called it**.
+- Arrow function: `this` is **lexically inherited** from surrounding scope.
+- Works in classes.
+
+```javascript
+const obj = {
+  regular: function() { console.log(this); },
+  arrow: () => console.log(this)
+};
+obj.regular(); // obj
+obj.arrow();   // global or surrounding scope
+
+class Person {
+  constructor(name) { this.name = name; }
+  greet() { console.log(this.name); }
+}
+new Person("Alice").greet(); // "Alice"
+```
+
+## 8. `map()` Method
+- Creates a **new array** by applying a function to each element.
+- Does **not modify** the original array.
+
+```javascript
+let arr = [1, 2, 3];
+let doubled = arr.map(x => x * 2);
+console.log(doubled); // [2, 4, 6]
+console.log(arr);     // [1, 2, 3]
+```
+
+## 9. Equality Operators
+- `==` → compares **value only**, allows type coercion.
+- `===` → compares **value and type** (strict equality).
+
+```javascript
+console.log(5 == "5");  // true
+console.log(5 === "5"); // false
+```
+
+## 10. `async`/`await`
+- `async` functions **always return a promise**.
+- `await` can only be used inside `async` functions.
+- `await` pauses execution until the promise resolves.
+
+```javascript
+async function fetchData() {
+  let data = await fetch("https://api.example.com");
+  console.log(data);
+}
+fetchData();
+```
+
+## 11. Spread Operator
+- `[..."hello"]` → ["h","e","l","l","o"]
+- Can be used to make shallow copies of arrays or convert strings to arrays.
+
+```javascript
+let str = "hello";
+console.log([...str]); // ["h","e","l","l","o"]
+
+let arr2 = [1,2,3];
+let copy = [...arr2]; // [1,2,3]
+```
+
+## 12. Checking Arrays
+- `Array.isArray(x)` → recommended
+- `x instanceof Array` → works but can fail across frames
+
+```javascript
+let arr3 = [1, 2, 3];
+console.log(Array.isArray(arr3));    // true
+console.log(arr3 instanceof Array);  // true
+```
+
+## 13. `typeof null`
+- `typeof null` → "object" (JavaScript quirk)
+
+```javascript
+console.log(typeof null); // "object"
+```
+
+## 14. Closures
+- A closure allows a function to **access variables from an outer function** even after the outer function has finished execution.
+
+```javascript
+function outer() {
+  let x = 10;
+  return function inner() { return x; };
+}
+const fn = outer();
+console.log(fn()); // 10
+```
+
+## 15. `setTimeout`
+- Schedules a function to run **after a delay**.
+- Does **not block** code execution; runs via the event loop.
+
+```javascript
+setTimeout(() => console.log("After 1 second"), 1000);
+console.log("Immediately"); // Prints first
+```
