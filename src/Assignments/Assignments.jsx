@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Assignments.css';
 
 export function Assignments() {
+    const [assignments, setAssignments] = useState(() => {
+        const raw = localStorage.getItem('procrastinot_assignments');
+        if (!raw) {
+            return [
+                { className: 'CS260', task: 'HTML Deliverable', due: '2025-09-24', id: 1 },
+                { className: 'POLI 110', task: 'Midterm 1', due: '2025-10-01', id: 2 },
+                { className: 'MATH 213', task: 'Written HW 3.1', due: '2025-10-02', id: 3 },
+            ];
+        }
+        try { return JSON.parse(raw); } catch { return []; }
+    });
+    // Form for inputs
+    const [form, setForm] = useState({ className: '', task: '', due: '' });
+    // Save when assignments change
+    useEffect(() => {
+        localStorage.setItem('procrastinot_assignments', JSON.stringify(assignments));
+    }, [assignments]);
+    // handleChange function
+    function handleChange(e) {
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    }
+    // handleSubmit adds the assignment without the page reloading (will not work if a field is blank)
+    function handleSubmit(e) {
+        e.preventDefault();
+        // Requires all fields
+        if (!form.className || !form.task || !form.due) return;
+        // Add the new assignment, allows for assignment to be deleted
+        setAssignments(prev => [...prev, { ...form, id: Date.now() }]);
+        // Clears the form
+        setForm({ className: '', task: '', due: '' });
+    }
+    // Delete handler to delete assignments
+    function handleDelete(id) {
+        setAssignments(prev => prev.filter(a => a.id !== id));
+    }
+
     return (
         <main className="flex-grow-1">
             <h1>Assignments</h1>
@@ -20,26 +56,32 @@ export function Assignments() {
                                         <th>Class</th>
                                         <th>Assignment</th>
                                         <th>Due Date</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
 
-                                {/* <!-- Table Body (with placeholder info) --> */}
+                                {/* <!-- Table Body (maps the assignments array) --> */}
                                 <tbody>
-                                    <tr>
-                                        <td>CS260</td>
-                                        <td>HTML Deliverable</td>
-                                        <td>Sept. 24</td>
-                                    </tr>
-                                    <tr>
-                                        <td>POLI 110</td>
-                                        <td>Midterm 1</td>
-                                        <td>Oct. 1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>MATH 213</td>
-                                        <td>Written HW 3.1</td>
-                                        <td>Oct. 2</td>
-                                    </tr>
+                                    {[...assignments]
+                                        // Sort by the date
+                                        .sort((a, b) => new Date(a.due) - new Date(b.due))
+                                        .map(a => (
+                                            <tr key={a.id}>
+                                                <td>{a.className}</td>
+                                                <td>{a.task}</td>
+                                                <td>{new Date(a.due).toLocaleDateString()}</td>
+                                                <td>
+                                                    {/* Button to delete assignments */}
+                                                    <button
+                                                        className="delete-btn"
+                                                        onClick={() => handleDelete(a.id)}
+                                                        title="Delete assignment"
+                                                    >
+                                                        ✖
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
@@ -55,32 +97,55 @@ export function Assignments() {
                         {/* <!-- Header --> */}
                         <h2 className="alternate">Add New Assignment:</h2>
 
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             {/* <!-- Class Input --> */}
                             <div className="input-group mb-3">
                                 <span className="input-group-text" id="basic-addon1">Class</span>
-                                <input type="text" className="form-control" placeholder="MATH 215" aria-label="Username"
-                                    aria-describedby="basic-addon1" />
+                                <input
+                                    name="className"
+                                    value={form.className}
+                                    onChange={handleChange}
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="MATH 215"
+                                />
                             </div>
 
                             {/* <!-- Assignment Input --> */}
                             <div className="input-group mb-3">
                                 <span className="input-group-text" id="basic-addon1">Assignment</span>
-                                <input type="text" className="form-control" placeholder="Research Paper" aria-label="Username"
-                                    aria-describedby="basic-addon1" />
+                                <input
+                                    name="task"
+                                    value={form.task}
+                                    onChange={handleChange}
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Research Paper"
+                                />
                             </div>
 
                             {/* <!-- Due Date Input --> */}
                             <div className="input-group mb-3">
                                 <span className="input-group-text" id="basic-addon-date">Due Date</span>
-                                <input type="date" className="form-control" aria-label="Due Date"
-                                    aria-describedby="basic-addon-date" />
+                                <input
+                                    name="due"
+                                    value={form.due}
+                                    onChange={handleChange}
+                                    type="date"
+                                    className="form-control"
+                                />
                             </div>
                             {/* <!-- Submit Button --> */}
                             <input className="btn btn-primary" type="submit" value="Submit" />
 
                             {/* <!-- Reset Button --> */}
-                            <input className="btn btn-secondary" type="reset" value="Reset" />
+                            <button
+                                className="btn btn-secondary ms-2"
+                                type="button"
+                                onClick={() => setForm({ className: '', task: '', due: '' })}
+                            >
+                                Reset
+                            </button>
                         </form>
                     </div>
                 </div>
