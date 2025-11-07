@@ -42,7 +42,7 @@ export function Home({ assignments, goals, weeklyPlan, userName }) {
                 <div className="row">
                     {/* <!-- Upcoming Assignments Snapshot --> */}
                     <div className="col-12 col-lg-4">
-                        <div className="card h-100 shadow-sm">
+                        <div className="card shadow-sm">
                             <div className="snapshot-card-header">Upcoming Assignments</div>
                             <div className="card-body p-0">
                                 {upcomingAssignments.length === 0 ? (
@@ -73,7 +73,7 @@ export function Home({ assignments, goals, weeklyPlan, userName }) {
 
                     {/* <!-- Goals Snapshot --> */}
                     <div className="col-12 col-lg-4">
-                        <div className="card h-100 shadow-sm">
+                        <div className="card shadow-sm">
                             <div className="snapshot-card-header">Goals</div>
                             <div className="card-body p-0">
                                 {goals.length === 0 ? (
