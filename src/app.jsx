@@ -1,5 +1,4 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react'; import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Assignments } from './Assignments/Assignments';
@@ -9,6 +8,24 @@ import { Home } from './Home/Home';
 import { Login } from './Login/Login';
 
 export default function App() {
+    //Default stuff for all the dynamic content
+
+    // Assignments
+    const [assignments, setAssignments] = useState([]);
+
+    // Goals
+    const [goals, setGoals] = useState([]);
+
+    // Weekly plan
+    const [weeklyPlan, setWeeklyPlan] = useState([
+        { id: 1, day: 'Monday', reading: '', completed: false },
+        { id: 2, day: 'Tuesday', reading: '', completed: false },
+        { id: 3, day: 'Wednesday', reading: '', completed: false },
+        { id: 4, day: 'Thursday', reading: '', completed: false },
+        { id: 5, day: 'Friday', reading: '', completed: false },
+        { id: 6, day: 'Saturday', reading: '', completed: false },
+        { id: 7, day: 'Sunday', reading: '', completed: false },
+    ]);
     return (
         <BrowserRouter>
             <div className="body d-flex flex-column min-vh-100">
@@ -48,10 +65,31 @@ export default function App() {
 
                 <Routes>
                     <Route path='/' element={<Login />} exact />
-                    <Route path='/Home' element={<Home />} />
-                    <Route path='/Assignments' element={<Assignments />} />
-                    <Route path='/Goals' element={<Goals />} />
-                    <Route path='/GospelPlan' element={<GospelPlan />} />
+                    <Route path='/Home' element={
+                        <Home
+                            assignments={assignments}
+                            goals={goals}
+                            weeklyPlan={weeklyPlan}
+                        />
+                    } />
+                    <Route path='/Assignments' element={
+                        <Assignments
+                            assignments={assignments}
+                            setAssignments={setAssignments}
+                        />}
+                    />
+                    <Route path='/Goals' element={
+                        <Goals
+                            goals={goals}
+                            setGoals={setGoals}
+                        />}
+                    />
+                    <Route path='/GospelPlan' element={
+                        <GospelPlan
+                            weeklyPlan={weeklyPlan}
+                            setWeeklyPlan={setWeeklyPlan}
+                        />}
+                    />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
 
