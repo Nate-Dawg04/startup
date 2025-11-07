@@ -6,16 +6,3 @@ h2.alternate {
     color: rgb(0, 0, 0);
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
-
-/* Delete Button to delete assignments */
-.delete-btn {
-    background: none;
-    border: none;
-    color: #d92c2c;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    color: #a71d2a;
-}

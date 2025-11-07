@@ -25,3 +25,8 @@ label.goalLabel {
 div.row {
     padding-bottom: 50px;
 }
+
+/* Input box for progress bars */
+input[type="number"] {
+    text-align: center;
+}

@@ -8,3 +8,34 @@ p.placeholders {
     padding: 10px;
     font-style: italic;
 }
+
+/* Styling for completed readings */
+.completed-row {
+    opacity: 0.6;
+    text-decoration: line-through;
+    transition: opacity 0.3s ease, text-decoration 0.3s ease;
+}
+
+td {
+    transition: background-color 0.2s ease;
+}
+
+td:hover {
+    background-color: #f8f9fa;
+}
+
+input.form-control-sm {
+    padding: 2px 6px;
+    font-size: 0.9rem;
+}
+
+.recently-read-scrollable {
+    max-height: 400px;
+    /* fixed height for scrollable area */
+    overflow-y: auto;
+    /* vertical scrolling if content exceeds height */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f8f9fa;
+}

@@ -73,9 +73,9 @@ export function Assignments() {
                                                 <td>
                                                     {/* Button to delete assignments */}
                                                     <button
-                                                        className="delete-btn"
-                                                        onClick={() => handleDelete(a.id)}
-                                                        title="Delete assignment"
+                                                        className="btn btn-sm btn-danger"
+                                                        onClick={() => handleDelete(g.id)}
+                                                        title="Delete goal"
                                                     >
                                                         ✖
                                                     </button>
