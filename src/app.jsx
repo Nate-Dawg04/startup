@@ -27,16 +27,27 @@ export default function App() {
         try { return JSON.parse(raw); } catch { return []; }
     });
 
-    // Weekly plan
-    const [weeklyPlan, setWeeklyPlan] = useState([
-        { id: 1, day: 'Monday', reading: '', completed: false },
-        { id: 2, day: 'Tuesday', reading: '', completed: false },
-        { id: 3, day: 'Wednesday', reading: '', completed: false },
-        { id: 4, day: 'Thursday', reading: '', completed: false },
-        { id: 5, day: 'Friday', reading: '', completed: false },
-        { id: 6, day: 'Saturday', reading: '', completed: false },
-        { id: 7, day: 'Sunday', reading: '', completed: false },
-    ]);
+    // Weekly plan, checks local storage for data
+    const [weeklyPlan, setWeeklyPlan] = useState(() => {
+        const raw = localStorage.getItem('procrastinot_weeklyPlan');
+        if (!raw) {
+            // default plan if nothing in localStorage
+            return [
+                { id: 1, day: 'Monday', reading: '', completed: false },
+                { id: 2, day: 'Tuesday', reading: '', completed: false },
+                { id: 3, day: 'Wednesday', reading: '', completed: false },
+                { id: 4, day: 'Thursday', reading: '', completed: false },
+                { id: 5, day: 'Friday', reading: '', completed: false },
+                { id: 6, day: 'Saturday', reading: '', completed: false },
+                { id: 7, day: 'Sunday', reading: '', completed: false },
+            ];
+        }
+        try {
+            return JSON.parse(raw);
+        } catch {
+            return [];
+        }
+    });
 
     // Save goals to localStorage automatically
     useEffect(() => {

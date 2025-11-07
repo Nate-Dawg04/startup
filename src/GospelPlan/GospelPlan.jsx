@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './GospelPlan.css';
 
 export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
-    // useState for the recently read stuff
-    const [recentlyRead, setRecentlyRead] = useState([]);
+    // useState for the recently read stuff, loads anything from local storage
+    const [recentlyRead, setRecentlyRead] = useState(() => {
+        const raw = localStorage.getItem('procrastinot_recentlyRead');
+        if (!raw) return [];
+        try { return JSON.parse(raw); } catch { return []; }
+    });
 
     // useStates to allow for editing
     const [editingId, setEditingId] = useState(null);
@@ -12,6 +16,11 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
     // useState for the message for a new week
     const [message, setMessage] = useState('');
+
+    // stores recentlyRead stuff in local storage
+    useEffect(() => {
+        localStorage.setItem('procrastinot_recentlyRead', JSON.stringify(recentlyRead));
+    }, [recentlyRead]);
 
     // Function to mark the reading as complete, and add the entry to recentlyRead
     function handleCompleteReading(id) {

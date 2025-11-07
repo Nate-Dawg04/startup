@@ -11,12 +11,6 @@ section.welcome {
     padding: 20px;
 }
 
-/* Placeholders for the snapshots that will be added later */
-p.SnapshotData {
-    padding: 20px;
-    text-align: center;
-}
-
 /* Animation for the picture */
 .slide-in {
     overflow: hidden;
@@ -42,4 +36,27 @@ p.presNelson {
     text-align: center;
     font-style: italic;
     padding: 10px;
+}
+
+/* Make the tables and cards look nice */
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Formatting of the headers of the cards */
+.snapshot-card-header {
+    padding: 10px;
+    background-color: #9ba17f;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
+
+/* Picture formatting */
+.picture-box {
+    margin-top: 2rem;
+    /* adjust as needed */
 }
