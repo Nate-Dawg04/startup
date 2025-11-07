@@ -101,8 +101,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [X] **All functionality implemented or mocked out** - The website is now fully functional and I've mocked out a few API calls and Websocket functionality, such as the live feed of the graded assignments or the generated goal suggestions. Even though I implemented so much, I've only had even more ideas about what I could add!
+- [X] **Hooks** - Many uses of useState and useEffect throughout the startup to manage all the different tables, store all data in local storage, etc.
 
 ## 🚀 Service deliverable
 
