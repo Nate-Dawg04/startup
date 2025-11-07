@@ -182,7 +182,7 @@ export function Assignments({ assignments, setAssignments }) {
                                 />
                             </div>
                             {/* <!-- Submit Button --> */}
-                            <input className="btn btn-primary" type="submit" value="Submit" />
+                            <input className="btn btn-success" type="submit" value="Submit" />
 
                             {/* <!-- Reset Button --> */}
                             <button

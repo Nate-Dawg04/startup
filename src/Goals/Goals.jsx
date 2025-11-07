@@ -142,7 +142,7 @@ export function Goals({ goals, setGoals }) {
                                 onChange={(e) => setKeywords(e.target.value)}
                             />
                             <button
-                                className="btn btn-primary mb-2"
+                                className="btn btn-success mb-2"
                                 onClick={generateGoalsMock}
                                 disabled={loading}
                             >

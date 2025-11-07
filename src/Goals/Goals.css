@@ -21,11 +21,6 @@ label.goalLabel {
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Add padding at the bottom of the page (was uncomfortably close for some reason) */
-div.row {
-    padding-bottom: 50px;
-}
-
 /* Input box for progress bars */
 input[type="number"] {
     text-align: center;

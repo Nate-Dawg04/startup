@@ -10,6 +10,11 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         try { return JSON.parse(raw); } catch { return []; }
     });
 
+    // useStates for the mock API call for reading suggestions
+    const [topic, setTopic] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [loading, setLoading] = useState(false);
+
     // useStates to allow for editing
     const [editingId, setEditingId] = useState(null);
     const [tempReading, setTempReading] = useState('');
@@ -74,6 +79,27 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         setMessage("🆕 New week started — add your readings!");
         setTimeout(() => setMessage(""), 3000);
     }
+
+    // Function for the mock API call to generate reading suggestions
+    function generateSuggestionsMock() {
+        if (!topic.trim()) return;
+
+        setLoading(true);
+        setSuggestions([]);
+
+        setTimeout(() => {
+            const keywords = topic.split(',').map(k => k.trim());
+            const generated = keywords.flatMap(k => [
+                `[Insert chapter on ${k} from the Book of Mormon here]`,
+                `[Insert General Conference talk about ${k} here]`,
+                `[Insert related scriptures on ${k} here]`
+            ]);
+            setSuggestions(Array.from(new Set(generated)).slice(0, 5));
+            setLoading(false);
+        }, 1200); // simulate API latency
+    }
+
+
     return (
         <main className="flex-grow-1">
             <h1>Gospel Study Plan</h1>
@@ -144,7 +170,7 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                                 </tbody>
                             </table>
                             <button
-                                className="btn btn-primary mt-2"
+                                className="btn btn-success mt-2"
                                 onClick={handleStartNewWeek}
                             >
                                 Start New Week
@@ -181,15 +207,49 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                         {/* <!-- coming soon... --> */}
                         <p className="placeholders"><b>Database</b> to store things that have been read</p>
                         <p className="placeholders"><b>Websocket data</b> that shows what others have been reading and what's
-                            popular worldwide</p>
+                            popular worldwide (maybe add later, time allowing)</p>
 
                     </div>
                 </div>
             </div>
 
             {/* <!-- coming soon... --> */}
-            <p className="placeholders"><b>3rd Party API</b> to create weekly study plans and get ideas for new study material
-            </p>
+            <div className="mt-4">
+                <h3>Get Study Suggestions</h3>
+                <input
+                    type="text"
+                    className="form-control mb-2"
+                    placeholder="Enter topics, e.g., faith, prayer"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                />
+                <button
+                    className="btn btn-success mb-3"
+                    onClick={generateSuggestionsMock}
+                    disabled={loading}
+                >
+                    {loading ? 'Generating...' : 'Generate Suggestions'}
+                </button>
+
+                {suggestions.length > 0 && (
+                    <div className="table-responsive">
+                        <table className="table table-hover table-bordered suggestions-table">
+                            <thead>
+                                <tr>
+                                    <th>Suggested Study Items</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {suggestions.map((s, i) => (
+                                    <tr key={i} className="table-light">
+                                        <td>{s}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
         </main>
     );
 }
