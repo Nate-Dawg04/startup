@@ -2,21 +2,9 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Goals.css';
 
-export function Goals() {
-    // Get Goals from localStorage or start with sample data
-    const [goals, setGoals] = useState(() => {
-        const saved = localStorage.getItem('procrastinot_goals');
-        // Default stuff
-        return saved ? JSON.parse(saved) : [];
-    });
-
+export function Goals({ goals, setGoals }) {
     // For the form input
     const [newGoal, setNewGoal] = useState('');
-
-    // Saves goals to local storage when they're added
-    useEffect(() => {
-        localStorage.setItem('procrastinot_goals', JSON.stringify(goals));
-    }, [goals]);
 
     // Updates the state as the user types
     function handleChange(e) {
@@ -25,12 +13,11 @@ export function Goals() {
 
     // Submit handler
     function handleSubmit(e) {
-        e.preventDefault(); // prevent page reload
-
+        e.preventDefault();
+        if (!newGoal.trim()) return;
         const nextId = goals.length ? Math.max(...goals.map(g => g.id)) + 1 : 1;
-
         setGoals([...goals, { id: nextId, task: newGoal, progress: 0 }]);
-        setNewGoal(''); // clear input
+        setNewGoal('');
     }
 
     // Delete handler

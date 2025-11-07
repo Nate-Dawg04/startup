@@ -2,18 +2,8 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Assignments.css';
 
-export function Assignments() {
-    const [assignments, setAssignments] = useState(() => {
-        const raw = localStorage.getItem('procrastinot_assignments');
-        if (!raw) {
-            return [
-                { className: 'CS260', task: 'HTML Deliverable', due: '2025-09-24', id: 1 },
-                { className: 'POLI 110', task: 'Midterm 1', due: '2025-10-01', id: 2 },
-                { className: 'MATH 213', task: 'Written HW 3.1', due: '2025-10-02', id: 3 },
-            ];
-        }
-        try { return JSON.parse(raw); } catch { return []; }
-    });
+export function Assignments({ assignments, setAssignments }) {
+
     // Form for inputs
     const [form, setForm] = useState({ className: '', task: '', due: '' });
     // Save when assignments change
@@ -74,7 +64,7 @@ export function Assignments() {
                                                     {/* Button to delete assignments */}
                                                     <button
                                                         className="btn btn-sm btn-danger"
-                                                        onClick={() => handleDelete(g.id)}
+                                                        onClick={() => handleDelete(a.id)}
                                                         title="Delete goal"
                                                     >
                                                         ✖

@@ -2,18 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './GospelPlan.css';
 
-export function GospelPlan() {
-    // useState for the weekly plan
-    const [weeklyPlan, setWeeklyPlan] = useState([
-        { id: 1, day: 'Monday', reading: '', completed: false },
-        { id: 2, day: 'Tuesday', reading: '', completed: false },
-        { id: 3, day: 'Wednesday', reading: '', completed: false },
-        { id: 4, day: 'Thursday', reading: '', completed: false },
-        { id: 5, day: 'Friday', reading: '', completed: false },
-        { id: 6, day: 'Saturday', reading: '', completed: false },
-        { id: 7, day: 'Sunday', reading: '', completed: false },
-    ]);
-
+export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     // useState for the recently read stuff
     const [recentlyRead, setRecentlyRead] = useState([]);
 

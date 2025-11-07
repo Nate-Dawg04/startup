@@ -1,4 +1,5 @@
-import React, { useState } from 'react'; import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Assignments } from './Assignments/Assignments';
@@ -11,10 +12,20 @@ export default function App() {
     //Default stuff for all the dynamic content
 
     // Assignments
-    const [assignments, setAssignments] = useState([]);
+    const [assignments, setAssignments] = useState(() => {
+        const raw = localStorage.getItem('procrastinot_assignments');
+        if (!raw) {
+            return [];
+        }
+        try { return JSON.parse(raw); } catch { return []; }
+    });
 
     // Goals
-    const [goals, setGoals] = useState([]);
+    const [goals, setGoals] = useState(() => {
+        const raw = localStorage.getItem('procrastinot_goals');
+        if (!raw) return [];
+        try { return JSON.parse(raw); } catch { return []; }
+    });
 
     // Weekly plan
     const [weeklyPlan, setWeeklyPlan] = useState([
@@ -26,6 +37,21 @@ export default function App() {
         { id: 6, day: 'Saturday', reading: '', completed: false },
         { id: 7, day: 'Sunday', reading: '', completed: false },
     ]);
+
+    // Save goals to localStorage automatically
+    useEffect(() => {
+        localStorage.setItem('procrastinot_goals', JSON.stringify(goals));
+    }, [goals]);
+
+    // Save assignments to localStorage
+    useEffect(() => {
+        localStorage.setItem('procrastinot_assignments', JSON.stringify(assignments));
+    }, [assignments]);
+
+    // Save gospel study plan to localStorage
+    useEffect(() => {
+        localStorage.setItem('procrastinot_weeklyPlan', JSON.stringify(weeklyPlan));
+    }, [weeklyPlan]);
     return (
         <BrowserRouter>
             <div className="body d-flex flex-column min-vh-100">
