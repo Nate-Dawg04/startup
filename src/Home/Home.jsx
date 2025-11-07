@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Verses } from '../GospelPlan/Verses.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css'
 
@@ -7,6 +8,23 @@ export function Home({ assignments, goals, weeklyPlan, userName }) {
     const upcomingAssignments = [...assignments]
         .sort((a, b) => new Date(a.due) - new Date(b.due))
         .slice(0, 7);
+
+    const [verse, setVerse] = useState('');
+
+    useEffect(() => {
+        function getRandomVerse() {
+            const random = Verses[Math.floor(Math.random() * Verses.length)];
+            setVerse(random);
+        }
+
+        // show one immediately
+        getRandomVerse();
+
+        // then show a new one every 10 seconds (10000 ms)
+        const interval = setInterval(getRandomVerse, 10000);
+
+        return () => clearInterval(interval);
+    }, []);
     return (
         <main className="flex-grow-1">
             <h1>Home</h1>
@@ -15,6 +33,12 @@ export function Home({ assignments, goals, weeklyPlan, userName }) {
                 <section className="welcome">Welcome to Procrastinot, <b>{userName}</b>! The all-in-one place to manage
                     your school assignments, goals, and gospel study plan. Here's your snapshot: </section>
 
+                {/* Gospel Verse Display */}
+                <section className="mt-3 text-center">
+                    <div className="alert alert-light border shadow-sm d-inline-block px-4 py-2">
+                        <em>{verse}</em>
+                    </div>
+                </section>
                 <div className="row">
                     {/* <!-- Upcoming Assignments Snapshot --> */}
                     <div className="col-12 col-lg-4">
