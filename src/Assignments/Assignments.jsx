@@ -3,13 +3,44 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Assignments.css';
 
 export function Assignments({ assignments, setAssignments }) {
-
     // Form for inputs
     const [form, setForm] = useState({ className: '', task: '', due: '' });
+
+    // Recently graded assignments state
+    const [graded, setGraded] = useState(() => {
+        const saved = localStorage.getItem('procrastinot_graded');
+        return saved ? JSON.parse(saved) : [];
+    });
+    const [flashId, setFlashId] = useState(null);
+
     // Save when assignments change
     useEffect(() => {
         localStorage.setItem('procrastinot_assignments', JSON.stringify(assignments));
     }, [assignments]);
+
+    // Mock WebSocket: push a new graded assignment every 10s
+    useEffect(() => {
+        const mockGradedPool = [
+            { className: 'Math', task: 'Algebra Quiz', grade: 'A (95%)' },
+            { className: 'Science', task: 'Lab Report', grade: 'B+ (89%)' },
+            { className: 'English', task: 'Essay', grade: 'A- (91%)' },
+            { className: 'History', task: 'Project', grade: 'B (84%)' },
+        ];
+
+        const interval = setInterval(() => {
+            const newGraded = { ...mockGradedPool[Math.floor(Math.random() * mockGradedPool.length)], id: Date.now() };
+            setGraded(prev => [newGraded, ...prev].slice(0, 5));
+            setFlashId(newGraded.id);
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    // save the graded assignments to localStorage
+    useEffect(() => {
+        localStorage.setItem('procrastinot_graded', JSON.stringify(graded));
+    }, [graded]);
+
     // handleChange function
     function handleChange(e) {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -75,10 +106,35 @@ export function Assignments({ assignments, setAssignments }) {
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* <!-- coming soon... --> */}
-                        <section className="mt-3"><b>WebSocket Data</b> will be displayed here &#40;live updated grades and
-                            assignments&#41;
+                        {/* Recently Graded Assignments */}
+                        <section className="mt-4">
+                            <h2>Recently Graded Assignments</h2>
+                            {graded.length === 0 ? (
+                                <p className="text-muted">No grades yet</p>
+                            ) : (
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Class</th>
+                                            <th>Assignment</th>
+                                            <th>Grade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {graded.map(a => (
+                                            <tr
+                                                key={a.id}
+                                                className={a.id === flashId ? 'flash-row' : ''}
+                                                onAnimationEnd={() => setFlashId(null)}
+                                            >
+                                                <td>{a.className}</td>
+                                                <td>{a.task}</td>
+                                                <td>{a.grade}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
                         </section>
                     </div>
 
