@@ -10,7 +10,6 @@ import { Login } from './Login/Login';
 
 export default function App() {
     //Default stuff for all the dynamic content
-
     // Assignments
     const [assignments, setAssignments] = useState(() => {
         const raw = localStorage.getItem('procrastinot_assignments');
@@ -49,6 +48,24 @@ export default function App() {
         }
     });
 
+    // For the authentication state of the user
+    const [authState, setAuthState] = useState('Unknown');
+    const [userName, setUserName] = useState(() => {
+        return localStorage.getItem('startup_user') || '';
+    });
+
+    // Check localStorage for a login
+    useEffect(() => {
+        const savedUser = localStorage.getItem('startup_user');
+        const savedAuth = localStorage.getItem('startup_auth');
+        if (savedUser && savedAuth === 'Authenticated') {
+            setUserName(savedUser);
+            setAuthState('Authenticated');
+        } else {
+            setAuthState('Unauthenticated');
+        }
+    }, []);
+
     // Save goals to localStorage automatically
     useEffect(() => {
         localStorage.setItem('procrastinot_goals', JSON.stringify(goals));
@@ -63,6 +80,12 @@ export default function App() {
     useEffect(() => {
         localStorage.setItem('procrastinot_weeklyPlan', JSON.stringify(weeklyPlan));
     }, [weeklyPlan]);
+
+    // For login
+    function handleAuthChange(newUser, newState) {
+        setUserName(newUser);
+        setAuthState(newState);
+    }
     return (
         <BrowserRouter>
             <div className="body d-flex flex-column min-vh-100">
@@ -72,62 +95,75 @@ export default function App() {
                     {/* Main Menu */}
                     <ul className="nav nav-tabs">
                         <li className="nav-item">
-                            <NavLink className='nav-link' to="">
+                            <NavLink className="nav-link" to="">
                                 Login
                             </NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="Home">
-                                Home
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="Assignments">
-                                Assignments
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="Goals">
-                                Goals
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="GospelPlan">
-                                Gospel Study Plan
-                            </NavLink>
-                        </li>
 
+                        {authState === 'Authenticated' && (
+                            <>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="Home">Home</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="Assignments">Assignments</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="Goals">Goals</NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="GospelPlan">Gospel Study Plan</NavLink>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </header>
 
                 <Routes>
-                    <Route path='/' element={<Login />} exact />
-                    <Route path='/Home' element={
-                        <Home
-                            assignments={assignments}
-                            goals={goals}
-                            weeklyPlan={weeklyPlan}
-                        />
-                    } />
-                    <Route path='/Assignments' element={
-                        <Assignments
-                            assignments={assignments}
-                            setAssignments={setAssignments}
-                        />}
+                    <Route
+                        path="/"
+                        element={<Login authState={authState} onAuthChange={handleAuthChange} />}
                     />
-                    <Route path='/Goals' element={
-                        <Goals
-                            goals={goals}
-                            setGoals={setGoals}
-                        />}
-                    />
-                    <Route path='/GospelPlan' element={
-                        <GospelPlan
-                            weeklyPlan={weeklyPlan}
-                            setWeeklyPlan={setWeeklyPlan}
-                        />}
-                    />
-                    <Route path='*' element={<NotFound />} />
+
+                    {authState === 'Authenticated' && (
+                        <>
+                            <Route
+                                path="/Home"
+                                element={
+                                    <Home
+                                        assignments={assignments}
+                                        goals={goals}
+                                        weeklyPlan={weeklyPlan}
+                                        userName={userName}
+                                    />
+                                }
+                            />
+                            <Route
+                                path="/Assignments"
+                                element={
+                                    <Assignments
+                                        assignments={assignments}
+                                        setAssignments={setAssignments}
+                                    />
+                                }
+                            />
+                            <Route
+                                path="/Goals"
+                                element={<Goals goals={goals} setGoals={setGoals} />}
+                            />
+                            <Route
+                                path="/GospelPlan"
+                                element={
+                                    <GospelPlan
+                                        weeklyPlan={weeklyPlan}
+                                        setWeeklyPlan={setWeeklyPlan}
+                                    />
+                                }
+                            />
+                        </>
+                    )}
+
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
 
                 {/* Footer with Startup Repo */}

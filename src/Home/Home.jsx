@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css'
 
-export function Home({ assignments, goals, weeklyPlan }) {
+export function Home({ assignments, goals, weeklyPlan, userName }) {
     // Sort assignments by most urgent, shows only 7
     const upcomingAssignments = [...assignments]
         .sort((a, b) => new Date(a.due) - new Date(b.due))
@@ -12,7 +12,7 @@ export function Home({ assignments, goals, weeklyPlan }) {
             <h1>Home</h1>
             <div className="container">
                 {/* <!-- Welcome Text --> */}
-                <section className="welcome">Welcome to Procrastinot, <b>[User name here]</b>! The all-in-one place to manage
+                <section className="welcome">Welcome to Procrastinot, <b>{userName}</b>! The all-in-one place to manage
                     your school assignments, goals, and gospel study plan. Here's your snapshot: </section>
 
                 <div className="row">
@@ -96,7 +96,7 @@ export function Home({ assignments, goals, weeklyPlan }) {
                                             {weeklyPlan.map(day => (
                                                 <tr key={day.id}>
                                                     <td>{day.day}</td>
-                                                    <td>{day.reading || <em>No reading yet</em>}</td>
+                                                    <td>{day.reading || <em>Nothing Planned</em>}</td>
                                                     <td>{day.completed ? '✅' : ''}</td>
                                                 </tr>
                                             ))}
