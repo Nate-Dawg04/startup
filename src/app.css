@@ -61,3 +61,7 @@ h1.mainName {
     padding: 10px;
     font-size: 5vh;
 }
+
+th {
+    background-color: #9ba17f !important;
+}

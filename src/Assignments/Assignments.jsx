@@ -69,7 +69,7 @@ export function Assignments({ assignments, setAssignments }) {
                     {/* <!-- Current Assignments and Due Dates Column --> */}
                     <div className="col-12 col-lg-6 mb-3 mb-lg-0">
                         <div className="table-responsive w-auto">
-                            <table className="table table-striped table-hover custom-table">
+                            <table className="table table-striped table-hover custom-table table-header-color">
                                 <thead>
 
                                     {/* <!-- Table Labels --> */}
