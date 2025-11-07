@@ -135,6 +135,7 @@ export function GospelPlan() {
                                                     <button
                                                         className="btn btn-sm btn-success"
                                                         onClick={() => handleCompleteReading(item.id)}
+                                                        disabled={!item.reading || item.reading.trim() === ""}
                                                     >
                                                         Finished
                                                     </button>
@@ -174,7 +175,6 @@ export function GospelPlan() {
                                                 <div className="fw-bold">{item.title}</div>
                                                 <b>Read:</b> {new Date(item.date).toLocaleDateString()}
                                             </div>
-                                            <span className="badge text-bg-primary rounded-pill">Trending</span>
                                         </li>
                                     ))}
                             </ol>

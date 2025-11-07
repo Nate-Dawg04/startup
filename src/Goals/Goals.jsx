@@ -7,10 +7,7 @@ export function Goals() {
     const [goals, setGoals] = useState(() => {
         const saved = localStorage.getItem('procrastinot_goals');
         // Default stuff
-        return saved ? JSON.parse(saved) : [
-            { id: 1, task: "Run a marathon", progress: 25 },
-            { id: 2, task: 'Read "The Way of Kings"', progress: 75 },
-        ];
+        return saved ? JSON.parse(saved) : [];
     });
 
     // For the form input
@@ -29,8 +26,6 @@ export function Goals() {
     // Submit handler
     function handleSubmit(e) {
         e.preventDefault(); // prevent page reload
-
-        if (newGoal.trim() === '') return; // ignore empty input
 
         const nextId = goals.length ? Math.max(...goals.map(g => g.id)) + 1 : 1;
 
