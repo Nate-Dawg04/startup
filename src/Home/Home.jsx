@@ -31,12 +31,12 @@ export function Home() {
                     </div>
 
                     {/* <!-- Picture of Pres Nelson (with animation) --> */}
-                    <div id="picture" className="img-fluid col-12 slide-in picture-box"><img width="400px" src="PresNelson.jpg"
-                        alt="random" />
+                    <div className="col-12 text-center slide-in picture-box">
+                        <img className="img-fluid mb-2" src="/PresNelson.jpg" alt="President Nelson" style={{ maxWidth: '400px' }} />
+                        <p className="mb-0">President Nelson is cheering you on!</p>
                     </div>
-                    <p className="col-12 presNelson">President Nelson is cheering you on!</p>
                 </div>
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }
