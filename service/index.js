@@ -1,26 +1,30 @@
-const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
+const express = require('express');
 const uuid = require('uuid');
-
 const app = express();
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-app.use(express.json());
-app.use(cookieParser());
-
-// Serve static files (used after deployment)
-app.use(express.static('public'));
 
 const authCookieName = 'token';
-let users = [];
-let goals = []; // You can rename this to whatever fits your app (e.g., “assignments”, “tasks”)
 
-let apiRouter = express.Router();
+// Memory storage for users and tasks (instead of scores)
+let users = [];
+let tasks = [];
+
+// Service port
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
+
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static('public'));
+
+// Router for API endpoints
+const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
-// --- AUTH ENDPOINTS ---
-// Create user
+/* ---------------- AUTH ENDPOINTS ---------------- */
+
+// Register new user
 apiRouter.post('/auth/create', async (req, res) => {
     if (await findUser('email', req.body.email)) {
         res.status(409).send({ msg: 'Existing user' });
@@ -31,7 +35,7 @@ apiRouter.post('/auth/create', async (req, res) => {
     }
 });
 
-// Login
+// Login existing user
 apiRouter.post('/auth/login', async (req, res) => {
     const user = await findUser('email', req.body.email);
     if (user && await bcrypt.compare(req.body.password, user.password)) {
@@ -43,7 +47,7 @@ apiRouter.post('/auth/login', async (req, res) => {
     }
 });
 
-// Logout
+// Logout user
 apiRouter.delete('/auth/logout', async (req, res) => {
     const user = await findUser('token', req.cookies[authCookieName]);
     if (user) delete user.token;
@@ -51,28 +55,20 @@ apiRouter.delete('/auth/logout', async (req, res) => {
     res.status(204).end();
 });
 
-// --- MOCK DATA ENDPOINTS ---
-// Example: Get all graded assignments / goals / etc.
-apiRouter.get('/goals', verifyAuth, (_req, res) => {
-    res.send(goals);
+// Middleware to secure endpoints
+const verifyAuth = async (req, res, next) => {
+    const user = await findUser('token', req.cookies[authCookieName]);
+    if (user) next();
+    else res.status(401).send({ msg: 'Unauthorized' });
+};
+
+/* ---------------- OPTIONAL TASK ENDPOINTS ---------------- */
+// Example: protected endpoint for fetching tasks
+apiRouter.get('/tasks', verifyAuth, (_req, res) => {
+    res.send(tasks);
 });
 
-// Example: Add a new goal
-apiRouter.post('/goal', verifyAuth, (req, res) => {
-    const newGoal = { id: uuid.v4(), ...req.body };
-    goals.unshift(newGoal);
-    res.send(goals);
-});
-
-// --- AUTH HELPERS ---
-function setAuthCookie(res, authToken) {
-    res.cookie(authCookieName, authToken, {
-        secure: true,
-        httpOnly: true,
-        sameSite: 'strict',
-    });
-}
-
+/* ---------------- HELPER FUNCTIONS ---------------- */
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = { email, password: passwordHash, token: uuid.v4() };
@@ -82,20 +78,30 @@ async function createUser(email, password) {
 
 async function findUser(field, value) {
     if (!value) return null;
-    return users.find((u) => u[field] === value);
+    return users.find(u => u[field] === value);
 }
 
-async function verifyAuth(req, res, next) {
-    const user = await findUser('token', req.cookies[authCookieName]);
-    if (user) next();
-    else res.status(401).send({ msg: 'Unauthorized' });
+function setAuthCookie(res, authToken) {
+    res.cookie(authCookieName, authToken, {
+        maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+        secure: true,
+        httpOnly: true,
+        sameSite: 'strict',
+    });
 }
 
-// Default route (for deployment)
+/* ---------------- DEFAULT HANDLERS ---------------- */
+// Catch all unknown routes and serve frontend
 app.use((_req, res) => {
     res.sendFile('index.html', { root: 'public' });
 });
 
+// Default error handler
+app.use((err, req, res, next) => {
+    res.status(500).send({ type: err.name, message: err.message });
+});
+
+/* ---------------- START SERVER ---------------- */
 app.listen(port, () => {
-    console.log(`✅ Startup service running on port ${port}`);
+    console.log(`Procrastinot backend listening on port ${port}`);
 });
