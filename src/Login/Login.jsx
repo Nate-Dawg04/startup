@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export function Login({ authState, onAuthChange }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
 
     // Restore email if user is already logged in
@@ -13,7 +14,7 @@ export function Login({ authState, onAuthChange }) {
     }, []);
 
     async function handleAuth(endpoint) {
-        if (!email.trim() || !password.trim()) return alert('Enter both email and password');
+        if (!email.trim() || !password.trim()) return setError('Enter both email and password');
 
         try {
             const response = await fetch(endpoint, {
@@ -26,12 +27,13 @@ export function Login({ authState, onAuthChange }) {
                 localStorage.setItem('startup_user', email);
                 localStorage.setItem('startup_auth', 'Authenticated');
                 onAuthChange(email, 'Authenticated');
+                setError(''); // clear any previous error
             } else {
                 const body = await response.json();
-                alert(body.msg || 'Authentication failed');
+                setError(body.msg || 'Authentication failed');
             }
         } catch (err) {
-            alert('Network error');
+            setError('Network error');
         }
     }
 

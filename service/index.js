@@ -57,15 +57,43 @@ apiRouter.delete('/auth/logout', async (req, res) => {
 
 // Middleware to secure endpoints
 const verifyAuth = async (req, res, next) => {
-    const user = await findUser('token', req.cookies[authCookieName]);
-    if (user) next();
-    else res.status(401).send({ msg: 'Unauthorized' });
+    const token = req.cookies[authCookieName];
+    const user = await findUser('token', token);
+    if (user) {
+        req.userEmail = user.email; // Attach email to request
+        next();
+    } else {
+        res.status(401).send({ msg: 'Unauthorized' });
+    }
 };
 
-/* ---------------- OPTIONAL TASK ENDPOINTS ---------------- */
-// Example: protected endpoint for fetching tasks
-apiRouter.get('/tasks', verifyAuth, (_req, res) => {
-    res.send(tasks);
+// Get all assignments for logged-in user
+apiRouter.get('/assignments', verifyAuth, (req, res) => {
+    const userAssignments = tasks.filter(a => a.userEmail === req.userEmail);
+    res.send(userAssignments);
+});
+
+// Add a new assignment
+apiRouter.post('/assignments', verifyAuth, (req, res) => {
+    const { className, task, due } = req.body;
+    if (!className || !task || !due) return res.status(400).send({ msg: 'Missing fields' });
+
+    const newAssignment = {
+        id: Date.now(),
+        userEmail: req.userEmail,
+        className,
+        task,
+        due,
+    };
+    tasks.push(newAssignment);
+    res.send(newAssignment);
+});
+
+// Delete an assignment
+apiRouter.delete('/assignments/:id', verifyAuth, (req, res) => {
+    const assignmentId = Number(req.params.id);
+    tasks = tasks.filter(a => !(a.id === assignmentId && a.userEmail === req.userEmail));
+    res.status(204).end();
 });
 
 /* ---------------- HELPER FUNCTIONS ---------------- */

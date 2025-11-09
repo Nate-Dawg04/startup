@@ -13,10 +13,21 @@ export function Assignments({ assignments, setAssignments }) {
     });
     const [flashId, setFlashId] = useState(null);
 
-    // Save when assignments change
+    // useEffect to get assignment data
     useEffect(() => {
-        localStorage.setItem('procrastinot_assignments', JSON.stringify(assignments));
-    }, [assignments]);
+        async function fetchAssignments() {
+            try {
+                const res = await fetch('/api/assignments');
+                if (res.ok) {
+                    const data = await res.json();
+                    setAssignments(data);
+                }
+            } catch (err) {
+                console.error('Failed to fetch assignments', err);
+            }
+        }
+        fetchAssignments();
+    }, []);
 
     // Mock WebSocket: push a new graded assignment every 10s
     useEffect(() => {
@@ -45,19 +56,25 @@ export function Assignments({ assignments, setAssignments }) {
     function handleChange(e) {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     }
-    // handleSubmit adds the assignment without the page reloading (will not work if a field is blank)
-    function handleSubmit(e) {
+
+    async function handleSubmit(e) {
         e.preventDefault();
-        // Requires all fields
         if (!form.className || !form.task || !form.due) return;
-        // Add the new assignment, allows for assignment to be deleted
-        setAssignments(prev => [...prev, { ...form, id: Date.now() }]);
-        // Clears the form
-        setForm({ className: '', task: '', due: '' });
-    }
-    // Delete handler to delete assignments
-    function handleDelete(id) {
-        setAssignments(prev => prev.filter(a => a.id !== id));
+
+        try {
+            const res = await fetch('/api/assignments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form),
+            });
+            if (res.ok) {
+                const newAssignment = await res.json();
+                setAssignments(prev => [...prev, newAssignment]);
+                setForm({ className: '', task: '', due: '' });
+            }
+        } catch (err) {
+            console.error('Failed to submit assignment', err);
+        }
     }
 
     return (
