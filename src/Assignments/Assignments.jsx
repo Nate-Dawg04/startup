@@ -57,6 +57,7 @@ export function Assignments({ assignments, setAssignments }) {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     }
 
+    // add assignments using a restricted endpoint
     async function handleSubmit(e) {
         e.preventDefault();
         if (!form.className || !form.task || !form.due) return;
@@ -74,6 +75,18 @@ export function Assignments({ assignments, setAssignments }) {
             }
         } catch (err) {
             console.error('Failed to submit assignment', err);
+        }
+    }
+
+    // delete assignments using restricted endpoint
+    async function handleDelete(id) {
+        try {
+            const res = await fetch(`/api/assignments/${id}`, { method: 'DELETE' });
+            if (res.ok || res.status === 204) {
+                setAssignments(prev => prev.filter(a => a.id !== id));
+            }
+        } catch (err) {
+            console.error('Failed to delete assignment', err);
         }
     }
 
