@@ -108,12 +108,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [X] **Node.js/Express HTTP service** - Setup backend server using express and defined specific routes such as /api/verse or /api/assignments
+- [X] **Static middleware for frontend** - Used middleware to allow the server to serve HTML, CSS, and JS files from the public folder
+- [X] **Calls to third party endpoints** - Implemented the /api/verse route which uses the Scriptures API (api.nephi.org). This part ended up being very confusing, particularly formatting the request to the API right, but thankfully it worked out in the end. 
+- [X] **Backend service endpoints** - I created a few different backend service endpoints, including /api/verse, /api/assignments/ and the login and logout endpoints
+- [X] **Frontend calls service endpoints** - My login, home, and assignments page all use fetch to call service endpoints
+- [X] **Supports registration, login, logout, and restricted endpoint** - I mirrored the Simon registration, login, logout, and restricted endpoint implementation, and it now works on my startup
 
 
 ## 🚀 DB deliverable
