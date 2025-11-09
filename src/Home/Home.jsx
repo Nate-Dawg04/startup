@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Verses } from '../GospelPlan/Verses.js';
+// import { Verses } from '../GospelPlan/Verses.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css'
 
@@ -11,20 +11,55 @@ export function Home({ assignments, goals, weeklyPlan, userName }) {
 
     const [verse, setVerse] = useState('');
 
+    // Verses to pull from the API using fetch
+    const popularVerses = [
+        '1+Nephi+3:7',
+        '2+Nephi+2:25',
+        'Mosiah+2:17',
+        'Alma+37:6',
+        'Ether+12:27',
+        'Moroni+10:5',
+        'Doctrine+and+Covenants+123:17',
+        'Doctrine+and+Covenants+50:24',
+        'Matthew+5:14-16',
+        'John+3:16',
+        'Romans+8:28',
+        'Philippians+4:13',
+        'Mosiah+18:9',
+        'Alma+37:35',
+    ];
+
+    // UseEffect to get random verse (from above list) from the API
     useEffect(() => {
-        function getRandomVerse() {
-            const random = Verses[Math.floor(Math.random() * Verses.length)];
-            setVerse(random);
+        async function fetchRandomVerse() {
+            try {
+                // Pick a random verse reference from the popular list
+                const randomRef = popularVerses[Math.floor(Math.random() * popularVerses.length)];
+
+                const res = await fetch(`/api/verse?ref=${randomRef}`);
+                if (!res.ok) throw new Error('Network response was not ok');
+
+                const data = await res.json();
+                if (data.verse) {
+                    setVerse(data.verse);
+                } else {
+                    setVerse('Verse not found.');
+                }
+            } catch (err) {
+                console.error('Failed to fetch verse:', err);
+                setVerse('Unable to fetch verse at this time.');
+            }
         }
 
-        // show one immediately
-        getRandomVerse();
+        // Show one immediately
+        fetchRandomVerse();
 
-        // then show a new one every 10 seconds (10000 ms)
-        const interval = setInterval(getRandomVerse, 10000);
+        // Then rotate every 15 seconds
+        const interval = setInterval(fetchRandomVerse, 15000);
 
         return () => clearInterval(interval);
     }, []);
+
     return (
         <main className="flex-grow-1">
             <h1>Home</h1>

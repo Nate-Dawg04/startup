@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const uuid = require('uuid');
 const app = express();
+const fetch = require('node-fetch');
 
 const authCookieName = 'token';
 
@@ -94,6 +95,39 @@ apiRouter.delete('/assignments/:id', verifyAuth, (req, res) => {
     const assignmentId = Number(req.params.id);
     tasks = tasks.filter(a => !(a.id === assignmentId && a.userEmail === req.userEmail));
     res.status(204).end();
+});
+
+// Fetch scripture verse from Nephi API
+apiRouter.get('/verse', async (req, res) => {
+    try {
+        const ref = req.query.ref;
+        if (!ref) return res.status(400).json({ error: 'Missing verse reference' });
+
+        // Use correct API endpoint
+        const url = `https://api.nephi.org/scriptures/?q=${ref}`;
+        console.log(`Fetching from Nephi API: ${url}`);
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.error('Nephi API error:', response.status, response.statusText);
+            return res.status(502).json({ error: 'Failed to fetch from Nephi API' });
+        }
+
+        const data = await response.json();
+
+        // The verse is inside data.scriptures[0]
+        if (!data.scriptures || data.scriptures.length === 0) {
+            return res.status(404).json({ error: 'Verse not found' });
+        }
+
+        const verse = data.scriptures[0];
+        const verseText = `${verse.scripture}: ${verse.text}`;
+        res.json({ verse: verseText });
+
+    } catch (err) {
+        console.error('Verse fetch failed:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 /* ---------------- HELPER FUNCTIONS ---------------- */
