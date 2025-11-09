@@ -11,6 +11,24 @@ const authCookieName = 'token';
 let users = [];
 let tasks = [];
 
+// Verses to pull from the API using fetch
+const popularVerses = [
+    '1 Nephi 3:7',
+    '2 Nephi 2:25',
+    'Mosiah 2:17',
+    'Alma 37:6',
+    'Ether 12:27',
+    'Moroni 10:5',
+    'Doctrine and Covenants 123:17',
+    'Doctrine and Covenants 50:24',
+    'Matthew 5:14-16',
+    'John 3:16',
+    'Romans 8:28',
+    'Philippians 4:13',
+    'Mosiah 18:9',
+    'Alma 37:35',
+];
+
 // Service port
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -97,35 +115,28 @@ apiRouter.delete('/assignments/:id', verifyAuth, (req, res) => {
     res.status(204).end();
 });
 
-// Fetch scripture verse from Nephi API
+// Gets a random verse from the API using the list above
 apiRouter.get('/verse', async (req, res) => {
     try {
-        const ref = req.query.ref;
-        if (!ref) return res.status(400).json({ error: 'Missing verse reference' });
-
-        // Use correct API endpoint
-        const url = `https://api.nephi.org/scriptures/?q=${ref}`;
-        console.log(`Fetching from Nephi API: ${url}`);
+        // Pick the reference from query or a random popular verse
+        const ref = req.query.ref || popularVerses[Math.floor(Math.random() * popularVerses.length)];
+        const url = `https://api.nephi.org/scriptures/?q=${encodeURIComponent(ref)}`;
 
         const response = await fetch(url);
         if (!response.ok) {
-            console.error('Nephi API error:', response.status, response.statusText);
             return res.status(502).json({ error: 'Failed to fetch from Nephi API' });
         }
 
         const data = await response.json();
-
-        // The verse is inside data.scriptures[0]
         if (!data.scriptures || data.scriptures.length === 0) {
             return res.status(404).json({ error: 'Verse not found' });
         }
 
         const verse = data.scriptures[0];
-        const verseText = `${verse.scripture}: ${verse.text}`;
-        res.json({ verse: verseText });
+        res.json({ verse: `${verse.scripture}: ${verse.text}` });
 
     } catch (err) {
-        console.error('Verse fetch failed:', err);
+        console.error('Verse fetch error:', err);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
