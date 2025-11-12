@@ -147,10 +147,15 @@ async function addRecentlyRead(userEmail, title, date) {
     return recentlyReadCollection.insertOne({ userEmail, title, date });
 }
 
+// Remove a single recently read item by title for a user
+async function removeRecentlyReadItem(userEmail, title) {
+    return recentlyReadCollection.deleteOne({ userEmail, title });
+}
+
 module.exports = {
     getUser, getUserByToken, addUser, updateUser,
     addAssignment, getAssignmentsByUser, deleteAssignment,
     addGoal, getGoalsByUser, deleteGoal, updateGoalProgress,
     addGospelPlan, getGospelPlansByUser, updateGospelPlan, resetGospelPlanForUser,
-    getRecentlyReadByUser, addRecentlyRead,
+    getRecentlyReadByUser, addRecentlyRead, removeRecentlyReadItem,
 };

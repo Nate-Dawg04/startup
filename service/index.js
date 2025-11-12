@@ -201,22 +201,23 @@ apiRouter.patch('/gospelPlan/:id', verifyAuth, async (req, res) => {
         const id = req.params.id;
         const email = req.userEmail;
 
-        // Build the fields to update dynamically
         const updateFields = {};
         if (reading !== undefined) updateFields.reading = reading;
         if (completed !== undefined) updateFields.completed = completed;
 
-        // Must update at least one field
         if (Object.keys(updateFields).length === 0) {
             return res.status(400).send({ error: 'No valid fields provided' });
         }
 
-        const result = await DB.updateGospelPlan(id, email, updateFields);
-        if (!result) {
-            return res.status(404).send({ error: 'Plan item not found' });
+        const updated = await DB.updateGospelPlan(id, email, updateFields);
+        if (!updated) return res.status(404).send({ error: 'Plan item not found' });
+
+        // Remove the reading from recently read ONLY if marking incomplete
+        if (completed === false && updated.reading) {
+            await DB.removeRecentlyReadItem(email, updated.reading);
         }
 
-        res.status(200).send(result);
+        res.send(updated);
     } catch (err) {
         console.error('PATCH /gospelPlan/:id error:', err);
         res.status(500).send({ error: err.message });

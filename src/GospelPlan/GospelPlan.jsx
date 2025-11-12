@@ -222,6 +222,52 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         }, 1200); // simulate API latency
     }
 
+    // Toggle completion of a reading
+    async function handleToggleReading(id) {
+        const item = weeklyPlan.find(p => p._id === id);
+        if (!item || !item.reading) return;
+
+        const newCompleted = !item.completed;
+
+        try {
+            const res = await fetch(`/api/gospelPlan/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed: newCompleted }),
+                credentials: 'include'
+            });
+            if (!res.ok) throw new Error('Failed to update reading');
+
+            const updatedItem = await res.json();
+
+            // Update weeklyPlan state
+            setWeeklyPlan(prev =>
+                prev.map(p => p._id === id ? updatedItem : p)
+            );
+
+            // If marking complete, add to recentlyRead
+            if (newCompleted) {
+                const res2 = await fetch('/api/recentlyRead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: item.reading }),
+                    credentials: 'include'
+                });
+                if (!res2.ok) throw new Error('Failed to add to recently read');
+                const newItem = await res2.json();
+
+                setRecentlyRead(prev => [newItem, ...prev]);
+            } else {
+                // Remove from recentlyRead state if marking incomplete
+                setRecentlyRead(prev =>
+                    prev.filter(r => r.title !== item.reading)
+                );
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
 
     return (
         <main className="flex-grow-1">
@@ -277,12 +323,19 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                                             </td>
                                             <td>
                                                 {item.completed ? (
-                                                    <span className="text-success fw-bold">Done ✅</span>
+                                                    <span
+                                                        className="text-success fw-bold"
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={() => handleToggleReading(item._id)}
+                                                        title="Click to mark incomplete"
+                                                    >
+                                                        Done ✅
+                                                    </span>
                                                 ) : (
                                                     <button
                                                         className="btn btn-sm btn-success"
-                                                        onClick={() => handleCompleteReading(item._id)}
-                                                        disabled={!item.reading || item.reading.trim() === ""}
+                                                        onClick={() => handleToggleReading(item._id)}
+                                                        disabled={!item.reading || !item.reading.trim()}
                                                     >
                                                         Finished
                                                     </button>
