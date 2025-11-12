@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const config = require('./dbConfig.json');
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
@@ -12,6 +12,7 @@ const gospelPlanCollection = db.collection('gospelPlan');
 // This will asynchronously test the connection and exit the process if it fails
 (async function testConnection() {
     try {
+        await client.connect();
         await db.command({ ping: 1 });
         console.log(`Connected to database`);
     } catch (ex) {
@@ -41,22 +42,15 @@ async function updateUser(user) {
 
 /* ASSIGNMENT STUFF */
 async function addAssignment(assignment) {
-    await assignmentCollection.insertOne(assignment);
+    return assignmentCollection.insertOne(assignment);
 }
 
-async function getAssignmentByUser(email) {
-    return assignmentCollection.find({ userEmail: email }.toArray());
+async function getAssignmentsByUser(email) {
+    return assignmentCollection.find({ userEmail: email }).toArray();
 }
 
 async function deleteAssignment(id, email) {
-    return assignmentCollection.deleteOne({ _id: newObjectId(id), userEmail: email });
-}
-
-async function updateAssignment(id, email, updates) {
-    return assignmentCollection.updateOne(
-        { _id: new ObjectId(id), userEmail: email },
-        { $set: { ...updates, updatedAt: new Date() } }
-    );
+    return assignmentCollection.deleteOne({ _id: new ObjectId(id), userEmail: email });
 }
 
 /* GOALS STUFF */
@@ -65,11 +59,11 @@ async function addGoal(goal) {
 }
 
 async function getGoalsByUser(email) {
-    return goalCollection.find({ _id: new ObjectId(id), userEmail: email }.toArray());
+    return goalCollection.find({ userEmail: email }).toArray();
 }
 
 async function deleteGoal(id, email) {
-    goalCollection.deleteOne({ _id: newObjectId(id), userEmail: email });
+    return goalCollection.deleteOne({ _id: new ObjectId(id), userEmail: email });
 }
 
 /* GOSPEL PLAN STUFF */
@@ -78,16 +72,16 @@ async function addGospelPlan(plan) {
 }
 
 async function getGospelPlansByUser(email) {
-    return gospelPlanCollection.find({ _id: newObjectId(id), userEmail: email }.toArray());
+    return gospelPlanCollection.find({ userEmail: email }).toArray();
 }
 
 async function deleteGospelPlan(id, email) {
-    return gospelPlanCollection.deleteOne({ _id: newObjectId(id), userEmail: email });
+    return gospelPlanCollection.deleteOne({ _id: new ObjectId(id), userEmail: email });
 }
 
 module.exports = {
     getUser, getUserByToken, addUser, updateUser,
-    addAssignment, getAssignmentsByUser, deleteAssignment, updateAssignment,
+    addAssignment, getAssignmentsByUser, deleteAssignment,
     addGoal, getGoalsByUser, deleteGoal,
     addGospelPlan, getGospelPlansByUser, deleteGospelPlan
 };

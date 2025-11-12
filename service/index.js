@@ -68,7 +68,7 @@ apiRouter.delete('/auth/logout', async (req, res) => {
     const user = await findUser('token', req.cookies[authCookieName]);
     if (user) {
         delete user.token;
-        DB.updateUser(user);
+        await DB.updateUser(user);
     }
     res.clearCookie(authCookieName);
     res.status(204).end();
@@ -87,31 +87,30 @@ const verifyAuth = async (req, res, next) => {
 };
 
 // Get all assignments for logged-in user
-apiRouter.get('/assignments', verifyAuth, (req, res) => {
-    const userAssignments = tasks.filter(a => a.userEmail === req.userEmail);
+apiRouter.get('/assignments', verifyAuth, async (req, res) => {
+    const userAssignments = await DB.getAssignmentsByUser(req.userEmail);
     res.send(userAssignments);
 });
 
 // Add a new assignment
-apiRouter.post('/assignments', verifyAuth, (req, res) => {
+apiRouter.post('/assignments', verifyAuth, async (req, res) => {
     const { className, task, due } = req.body;
     if (!className || !task || !due) return res.status(400).send({ msg: 'Missing fields' });
 
     const newAssignment = {
-        id: Date.now(),
         userEmail: req.userEmail,
         className,
         task,
         due,
+        createdAt: new Date(),
     };
-    tasks.push(newAssignment);
-    res.send(newAssignment);
+    const result = await DB.addAssignment(newAssignment);
+    res.status(201).send({ ...newAssignment, _id: result.insertedId });
 });
 
 // Delete an assignment
-apiRouter.delete('/assignments/:id', verifyAuth, (req, res) => {
-    const assignmentId = Number(req.params.id);
-    tasks = tasks.filter(a => !(a.id === assignmentId && a.userEmail === req.userEmail));
+apiRouter.delete('/assignments/:id', verifyAuth, async (req, res) => {
+    await DB.deleteAssignment(req.params.id, req.userEmail);
     res.status(204).end();
 });
 
@@ -165,7 +164,7 @@ async function findUser(field, value) {
 function setAuthCookie(res, authToken) {
     res.cookie(authCookieName, authToken, {
         maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
-        secure: true,
+        secure: false,
         httpOnly: true,
         sameSite: 'strict',
     });

@@ -17,7 +17,9 @@ export function Assignments({ assignments, setAssignments }) {
     useEffect(() => {
         async function fetchAssignments() {
             try {
-                const res = await fetch('/api/assignments');
+                const res = await fetch('/api/assignments', {
+                    credentials: 'include', // <-- add this
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setAssignments(data);
@@ -67,6 +69,7 @@ export function Assignments({ assignments, setAssignments }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
+                credentials: 'include',
             });
             if (res.ok) {
                 const newAssignment = await res.json();
@@ -81,13 +84,22 @@ export function Assignments({ assignments, setAssignments }) {
     // delete assignments using restricted endpoint
     async function handleDelete(id) {
         try {
-            const res = await fetch(`/api/assignments/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/assignments/${id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
             if (res.ok || res.status === 204) {
-                setAssignments(prev => prev.filter(a => a.id !== id));
+                setAssignments(prev => prev.filter(a => a._id !== id));
             }
         } catch (err) {
             console.error('Failed to delete assignment', err);
         }
+    }
+
+    // Function to ensure the date is formatted correctly (was off by one before)
+    function formatLocalDate(dateString) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day); // month is 0-indexed
     }
 
     return (
@@ -120,12 +132,12 @@ export function Assignments({ assignments, setAssignments }) {
                                             <tr key={a.id}>
                                                 <td>{a.className}</td>
                                                 <td>{a.task}</td>
-                                                <td>{new Date(a.due).toLocaleDateString()}</td>
+                                                <td>{formatLocalDate(a.due).toLocaleDateString()}</td>
                                                 <td>
                                                     {/* Button to delete assignments */}
                                                     <button
                                                         className="btn btn-sm btn-danger"
-                                                        onClick={() => handleDelete(a.id)}
+                                                        onClick={() => handleDelete(a._id)}
                                                         title="Delete goal"
                                                     >
                                                         ✖

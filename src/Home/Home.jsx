@@ -67,7 +67,7 @@ export function Home({ assignments, goals, weeklyPlan, userName }) {
                                                 <tr key={a.id}>
                                                     <td>{a.className}</td>
                                                     <td>{a.task}</td>
-                                                    <td>{new Date(a.due).toLocaleDateString()}</td>
+                                                    <td>{new Date(a.due + 'T00:00').toLocaleDateString()}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
