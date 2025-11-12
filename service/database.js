@@ -13,12 +13,14 @@ const gospelPlanCollection = db.collection('gospelPlan');
 (async function testConnection() {
     try {
         await db.command({ ping: 1 });
-        console.log(`Connect to database`);
+        console.log(`Connected to database`);
     } catch (ex) {
         console.log(`Unable to connect to database with ${url} because ${ex.message}`);
         process.exit(1);
     }
 })();
+
+/* USER STUFF */
 
 function getUser(email) {
     return userCollection.findOne({ email: email });
@@ -37,9 +39,55 @@ async function updateUser(user) {
 }
 
 
+/* ASSIGNMENT STUFF */
+async function addAssignment(assignment) {
+    await assignmentCollection.insertOne(assignment);
+}
+
+async function getAssignmentByUser(email) {
+    return assignmentCollection.find({ userEmail: email }.toArray());
+}
+
+async function deleteAssignment(id, email) {
+    return assignmentCollection.deleteOne({ _id: newObjectId(id), userEmail: email });
+}
+
+async function updateAssignment(id, email, updates) {
+    return assignmentCollection.updateOne(
+        { _id: new ObjectId(id), userEmail: email },
+        { $set: { ...updates, updatedAt: new Date() } }
+    );
+}
+
+/* GOALS STUFF */
+async function addGoal(goal) {
+    return goalCollection.insertOne(goal);
+}
+
+async function getGoalsByUser(email) {
+    return goalCollection.find({ _id: new ObjectId(id), userEmail: email }.toArray());
+}
+
+async function deleteGoal(id, email) {
+    goalCollection.deleteOne({ _id: newObjectId(id), userEmail: email });
+}
+
+/* GOSPEL PLAN STUFF */
+async function addGospelPlan(plan) {
+    return gospelPlanCollection.insertOne(plan);
+}
+
+async function getGospelPlansByUser(email) {
+    return gospelPlanCollection.find({ _id: newObjectId(id), userEmail: email }.toArray());
+}
+
+async function deleteGospelPlan(id, email) {
+    return gospelPlanCollection.deleteOne({ _id: newObjectId(id), userEmail: email });
+}
+
 module.exports = {
-    getUser,
-    getUserByToken,
-    addUser,
-    updateUser,
+    getUser, getUserByToken, addUser, updateUser,
+    addAssignment, getAssignmentsByUser, deleteAssignment, updateAssignment,
+    addGoal, getGoalsByUser, deleteGoal,
+    addGospelPlan, getGospelPlansByUser, deleteGospelPlan
 };
