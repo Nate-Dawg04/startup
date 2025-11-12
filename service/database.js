@@ -91,16 +91,30 @@ async function addGospelPlan(plan) {
 }
 
 async function getGospelPlansByUser(email) {
-    return gospelPlanCollection.find({ userEmail: email }).toArray();
+    return await gospelPlanCollection
+        .find({ userEmail: email })
+        .sort({ createdAt: 1 })
+        .toArray();
 }
 
 async function deleteGospelPlan(id, email) {
     return gospelPlanCollection.deleteOne({ _id: new ObjectId(id), userEmail: email });
 }
 
+async function updateGospelPlan(id, email, fields) {
+    const objId = new ObjectId(id);
+    await gospelPlanCollection.updateOne(
+        { _id: objId, userEmail: email },
+        { $set: fields }
+    );
+    const updated = await gospelPlanCollection.findOne({ _id: objId, userEmail: email });
+    if (updated) updated._id = updated._id.toString();
+    return updated;
+}
+
 module.exports = {
     getUser, getUserByToken, addUser, updateUser,
     addAssignment, getAssignmentsByUser, deleteAssignment,
     addGoal, getGoalsByUser, deleteGoal, updateGoalProgress,
-    addGospelPlan, getGospelPlansByUser, deleteGospelPlan
+    addGospelPlan, getGospelPlansByUser, deleteGospelPlan, updateGospelPlan,
 };

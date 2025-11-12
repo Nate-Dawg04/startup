@@ -10,6 +10,10 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         try { return JSON.parse(raw); } catch { return []; }
     });
 
+    //useStates for editing the readings
+    const [newDay, setNewDay] = useState('');
+    const [newReading, setNewReading] = useState('');
+
     // useStates for the mock API call for reading suggestions
     const [topic, setTopic] = useState('');
     const [suggestions, setSuggestions] = useState([]);
@@ -27,25 +31,93 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         localStorage.setItem('procrastinot_recentlyRead', JSON.stringify(recentlyRead));
     }, [recentlyRead]);
 
+    // loads the gospel plan saved in the DB
+    useEffect(() => {
+        async function fetchPlans() {
+            try {
+                const res = await fetch('/api/gospelPlan', { credentials: 'include' });
+                if (!res.ok) throw new Error('Failed to fetch gospel plans');
+                const data = await res.json();
+
+                if (data.length === 0) {
+                    // no data in DB → create a default week
+                    const defaultWeek = [
+                        { day: 'Monday', reading: '', completed: false },
+                        { day: 'Tuesday', reading: '', completed: false },
+                        { day: 'Wednesday', reading: '', completed: false },
+                        { day: 'Thursday', reading: '', completed: false },
+                        { day: 'Friday', reading: '', completed: false },
+                        { day: 'Saturday', reading: '', completed: false },
+                        { day: 'Sunday', reading: '', completed: false },
+                    ];
+
+                    // save default to DB
+                    const created = await Promise.all(
+                        defaultWeek.map(async (item) => {
+                            const res = await fetch('/api/gospelPlan', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                credentials: 'include',
+                                body: JSON.stringify(item),
+                            });
+                            return await res.json();
+                        })
+                    );
+
+                    setWeeklyPlan(created.map(p => ({ ...p, _id: p._id.toString() })));
+                } else {
+                    setWeeklyPlan(data.map(p => ({ ...p, _id: p._id.toString() })));
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchPlans();
+    }, []);
+
+    // Function for adding items to the plan
+    async function handleAddPlanItem(e) {
+        e.preventDefault();
+        if (!newDay || !newReading) return;
+
+        try {
+            const res = await fetch('/api/gospelPlan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ day: newDay, reading: newReading }),
+            });
+
+            if (!res.ok) throw new Error('Failed to add plan item');
+            const newItem = await res.json();
+            setWeeklyPlan(prev => [...prev, { ...newItem, _id: newItem._id.toString() }]);
+            setNewDay('');
+            setNewReading('');
+        } catch (err) {
+            console.error('Error adding plan item:', err);
+        }
+    }
+
     // Function to mark the reading as complete, and add the entry to recentlyRead
     function handleCompleteReading(id) {
-        // Find the item first
-        const completedItem = weeklyPlan.find(item => item.id === id);
+        const completedItem = weeklyPlan.find(item => item._id === id);
+        if (!completedItem || !completedItem.reading.trim()) return;
 
-        if (!completedItem) return;
-
-        // Only proceed if there's something in the reading
-        if (!completedItem.reading || completedItem.reading.trim() === "") {
-            alert("Nice try! No reading was completed");
-            return;
-        }
-
-        // Mark the item as completed in the weekly plan
-        setWeeklyPlan(prevPlan =>
-            prevPlan.map(item =>
-                item.id === id ? { ...item, completed: true } : item
+        setWeeklyPlan(prev =>
+            prev.map(item =>
+                item._id === id ? { ...item, completed: true } : item
             )
         );
+
+        // Save completed status to DB
+        if (completedItem._id) {
+            fetch(`/api/gospelPlan/${completedItem._id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed: true }),
+                credentials: 'include'
+            }).catch(console.error);
+        }
 
         // Add to recentlyRead
         const nextId = recentlyRead.length ? Math.max(...recentlyRead.map(r => r.id)) + 1 : 1;
@@ -54,15 +126,33 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     }
 
     // Updates the correct item's reading value and exits edit mode
-    function handleSaveEdit(id) {
+    async function handleSaveEdit(id) {
         setWeeklyPlan(prev =>
             prev.map(item =>
-                item.id === id ? { ...item, reading: tempReading } : item
+                item._id === id ? { ...item, reading: tempReading } : item
             )
         );
+
+        // Save to DB
+        const planItem = weeklyPlan.find(item => item._id === id);
+        if (planItem) {
+            try {
+                await fetch(`/api/gospelPlan/${planItem._id}`, {
+                    method: 'PATCH', // optional: you can create a PATCH endpoint if you want incremental edits
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reading: tempReading }),
+                    credentials: 'include'
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         setEditingId(null);
         setTempReading('');
     }
+
+
 
     // Function for starting a new week
     function handleStartNewWeek() {
@@ -125,27 +215,27 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                                 <tbody>
                                     {weeklyPlan.map(item => (
                                         <tr
-                                            key={item.id}
+                                            key={item._id || item.day}
                                             className={item.completed ? 'completed-row' : ''}
                                         >
                                             <td>{item.day}</td>
                                             <td
                                                 onClick={() => {
-                                                    setEditingId(item.id);
-                                                    setTempReading(item.reading);
+                                                    setEditingId(item._id);
+                                                    setTempReading(item.reading || '');
                                                 }}
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                {editingId === item.id ? (
+                                                {editingId === item._id ? (
                                                     <input
                                                         type="text"
                                                         className="form-control form-control-sm"
                                                         value={tempReading}
                                                         autoFocus
                                                         onChange={(e) => setTempReading(e.target.value)}
-                                                        onBlur={() => handleSaveEdit(item.id)}
+                                                        onBlur={() => handleSaveEdit(item._id)}
                                                         onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') handleSaveEdit(item.id);
+                                                            if (e.key === 'Enter') handleSaveEdit(item._id);
                                                         }}
                                                     />
                                                 ) : (
@@ -158,7 +248,7 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                                                 ) : (
                                                     <button
                                                         className="btn btn-sm btn-success"
-                                                        onClick={() => handleCompleteReading(item.id)}
+                                                        onClick={() => handleCompleteReading(item._id)}
                                                         disabled={!item.reading || item.reading.trim() === ""}
                                                     >
                                                         Finished

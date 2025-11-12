@@ -159,6 +159,83 @@ apiRouter.patch('/goals/:id', verifyAuth, async (req, res) => {
     }
 });
 
+/* GOSPEL STUDY PLAN */
+
+// Get all gospel plans for the logged-in user
+apiRouter.get('/gospelPlan', verifyAuth, async (req, res) => {
+    try {
+        const plan = await DB.getGospelPlansByUser(req.userEmail);
+        res.send(plan);
+    } catch (err) {
+        console.error('GET /gospelPlan error:', err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Add a new gospel plan item
+apiRouter.post('/gospelPlan', verifyAuth, async (req, res) => {
+    try {
+        const { day, reading, completed } = req.body;
+        if (!day) return res.status(400).send({ msg: 'Missing day' });
+
+        const newPlan = {
+            userEmail: req.userEmail,
+            day,
+            reading,
+            completed: completed || false,
+            createdAt: new Date()
+        };
+
+        const result = await DB.addGospelPlan(newPlan);
+        res.status(201).send({ ...newPlan, _id: result.insertedId });
+    } catch (err) {
+        console.error('POST /gospelPlan error:', err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Delete a gospel plan item
+apiRouter.delete('/gospelPlan/:id', verifyAuth, async (req, res) => {
+    try {
+        await DB.deleteGospelPlan(req.params.id, req.userEmail);
+        res.status(204).end();
+    } catch (err) {
+        console.error('DELETE /gospelPlan/:id error:', err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Update a gospel plan item (e.g., change reading or mark as completed)
+apiRouter.patch('/gospelPlan/:id', verifyAuth, async (req, res) => {
+    try {
+        const { reading, completed } = req.body;
+        const id = req.params.id;
+        const email = req.userEmail;
+
+        // Build the fields to update dynamically
+        const updateFields = {};
+        if (reading !== undefined) updateFields.reading = reading;
+        if (completed !== undefined) updateFields.completed = completed;
+
+        // Must update at least one field
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).send({ error: 'No valid fields provided' });
+        }
+
+        const result = await DB.updateGospelPlan(id, email, updateFields);
+        if (!result) {
+            return res.status(404).send({ error: 'Plan item not found' });
+        }
+
+        res.status(200).send(result);
+    } catch (err) {
+        console.error('PATCH /gospelPlan/:id error:', err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+/* VERSES */
+
 // Gets a random verse from the API using the list above
 apiRouter.get('/verse', async (req, res) => {
     try {
