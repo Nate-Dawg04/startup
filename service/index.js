@@ -194,17 +194,6 @@ apiRouter.post('/gospelPlan', verifyAuth, async (req, res) => {
     }
 });
 
-// Delete a gospel plan item
-apiRouter.delete('/gospelPlan/:id', verifyAuth, async (req, res) => {
-    try {
-        await DB.deleteGospelPlan(req.params.id, req.userEmail);
-        res.status(204).end();
-    } catch (err) {
-        console.error('DELETE /gospelPlan/:id error:', err);
-        res.status(500).send({ error: err.message });
-    }
-});
-
 // Update a gospel plan item (e.g., change reading or mark as completed)
 apiRouter.patch('/gospelPlan/:id', verifyAuth, async (req, res) => {
     try {
@@ -230,6 +219,44 @@ apiRouter.patch('/gospelPlan/:id', verifyAuth, async (req, res) => {
         res.status(200).send(result);
     } catch (err) {
         console.error('PATCH /gospelPlan/:id error:', err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Reset gospel plan for the logged-in user
+apiRouter.post('/gospelPlan/reset', verifyAuth, async (req, res) => {
+    try {
+        const newWeek = await DB.resetGospelPlanForUser(req.userEmail);
+        res.status(201).send(newWeek);
+    } catch (err) {
+        console.error('POST /gospelPlan/reset error:', err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+/* RECENTLY READ */
+// Get recently read items
+apiRouter.get('/recentlyRead', verifyAuth, async (req, res) => {
+    try {
+        const items = await DB.getRecentlyReadByUser(req.userEmail);
+        res.send(items.map(i => ({ ...i, _id: i._id.toString() })));
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// Add a new recently read item
+apiRouter.post('/recentlyRead', verifyAuth, async (req, res) => {
+    try {
+        const { title } = req.body;
+        if (!title) return res.status(400).send({ msg: 'Missing title' });
+
+        const date = new Date();
+        const result = await DB.addRecentlyRead(req.userEmail, title, date);
+        res.status(201).send({ _id: result.insertedId.toString(), title, date });
+    } catch (err) {
+        console.error(err);
         res.status(500).send({ error: err.message });
     }
 });

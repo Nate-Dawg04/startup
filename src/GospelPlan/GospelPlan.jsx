@@ -3,12 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './GospelPlan.css';
 
 export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
-    // useState for the recently read stuff, loads anything from local storage
-    const [recentlyRead, setRecentlyRead] = useState(() => {
-        const raw = localStorage.getItem('procrastinot_recentlyRead');
-        if (!raw) return [];
-        try { return JSON.parse(raw); } catch { return []; }
-    });
+    // useState for the recently read stuff
+    const [recentlyRead, setRecentlyRead] = useState([]);
 
     //useStates for editing the readings
     const [newDay, setNewDay] = useState('');
@@ -75,6 +71,21 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         fetchPlans();
     }, []);
 
+    // Loads the recently read stuff from the database
+    useEffect(() => {
+        async function fetchRecentlyRead() {
+            try {
+                const res = await fetch('/api/recentlyRead', { credentials: 'include' });
+                if (!res.ok) throw new Error('Failed to fetch recently read');
+                const data = await res.json();
+                setRecentlyRead(data); // show all items, scrollable
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchRecentlyRead();
+    }, []);
+
     // Function for adding items to the plan
     async function handleAddPlanItem(e) {
         e.preventDefault();
@@ -99,30 +110,48 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     }
 
     // Function to mark the reading as complete, and add the entry to recentlyRead
-    function handleCompleteReading(id) {
+    async function handleCompleteReading(id) {
         const completedItem = weeklyPlan.find(item => item._id === id);
         if (!completedItem || !completedItem.reading.trim()) return;
 
+        // 1. Update weekly plan state
         setWeeklyPlan(prev =>
             prev.map(item =>
                 item._id === id ? { ...item, completed: true } : item
             )
         );
 
-        // Save completed status to DB
+        // 2. Save completed status to DB
         if (completedItem._id) {
-            fetch(`/api/gospelPlan/${completedItem._id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ completed: true }),
-                credentials: 'include'
-            }).catch(console.error);
+            try {
+                await fetch(`/api/gospelPlan/${completedItem._id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ completed: true }),
+                    credentials: 'include'
+                });
+            } catch (err) {
+                console.error('Failed to update plan item:', err);
+            }
         }
 
-        // Add to recentlyRead
-        const nextId = recentlyRead.length ? Math.max(...recentlyRead.map(r => r.id)) + 1 : 1;
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-        setRecentlyRead([...recentlyRead, { id: nextId, title: completedItem.reading, date: today }]);
+        // 3. Add to recently read DB and update live list
+        try {
+            const res = await fetch('/api/recentlyRead', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: completedItem.reading }),
+                credentials: 'include'
+            });
+            if (!res.ok) throw new Error('Failed to save recently read');
+
+            const newItem = await res.json();
+
+            // Update recentlyRead state live
+            setRecentlyRead(prev => [newItem, ...prev]);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     // Updates the correct item's reading value and exits edit mode
@@ -152,22 +181,26 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         setTempReading('');
     }
 
-
-
     // Function for starting a new week
-    function handleStartNewWeek() {
+    async function handleStartNewWeek() {
         const confirmed = window.confirm("Start a new weekly plan? This will clear all readings and progress.");
         if (!confirmed) return;
 
-        const resetPlan = weeklyPlan.map(item => ({
-            ...item,
-            reading: '',
-            completed: false
-        }));
+        try {
+            const res = await fetch('/api/gospelPlan/reset', {
+                method: 'POST',
+                credentials: 'include'
+            });
+            if (!res.ok) throw new Error('Failed to reset week');
 
-        setWeeklyPlan(resetPlan);
-        setMessage("🆕 New week started — add your readings!");
-        setTimeout(() => setMessage(""), 3000);
+            const newWeek = await res.json();
+            setWeeklyPlan(newWeek.map(p => ({ ...p, _id: p._id.toString() })));
+            setMessage("🆕 New week started — add your readings!");
+            setTimeout(() => setMessage(""), 3000);
+
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     // Function for the mock API call to generate reading suggestions
@@ -284,7 +317,7 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                                 {[...recentlyRead]
                                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                                     .map(item => (
-                                        <li key={item.id} className="list-group-item d-flex justify-content-between align-items-start">
+                                        <li key={item._id} className="list-group-item d-flex justify-content-between align-items-start">
                                             <div className="ms-2 me-auto">
                                                 <div className="fw-bold">{item.title}</div>
                                                 <b>Read:</b> {new Date(item.date).toLocaleDateString()}
@@ -295,7 +328,6 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                         </div>
 
                         {/* <!-- coming soon... --> */}
-                        <p className="placeholders"><b>Database</b> to store things that have been read</p>
                         <p className="placeholders"><b>Websocket data</b> that shows what others have been reading and what's
                             popular worldwide (maybe add later, time allowing)</p>
 

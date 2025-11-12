@@ -30,7 +30,7 @@ input.form-control-sm {
 }
 
 .recently-read-scrollable {
-    max-height: 400px;
+    max-height: 280px;
     /* fixed height for scrollable area */
     overflow-y: auto;
     /* vertical scrolling if content exceeds height */

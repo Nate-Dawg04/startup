@@ -8,6 +8,7 @@ const userCollection = db.collection('user');
 const assignmentCollection = db.collection('assignments');
 const goalCollection = db.collection('goal');
 const gospelPlanCollection = db.collection('gospelPlan');
+const recentlyReadCollection = db.collection('recentlyRead');
 
 // This will asynchronously test the connection and exit the process if it fails
 (async function testConnection() {
@@ -97,10 +98,6 @@ async function getGospelPlansByUser(email) {
         .toArray();
 }
 
-async function deleteGospelPlan(id, email) {
-    return gospelPlanCollection.deleteOne({ _id: new ObjectId(id), userEmail: email });
-}
-
 async function updateGospelPlan(id, email, fields) {
     const objId = new ObjectId(id);
     await gospelPlanCollection.updateOne(
@@ -112,9 +109,48 @@ async function updateGospelPlan(id, email, fields) {
     return updated;
 }
 
+async function resetGospelPlanForUser(email) {
+    // Delete all existing plan items
+    await gospelPlanCollection.deleteMany({ userEmail: email });
+
+    // Create default week
+    const defaultWeek = [
+        { day: 'Monday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+        { day: 'Tuesday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+        { day: 'Wednesday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+        { day: 'Thursday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+        { day: 'Friday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+        { day: 'Saturday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+        { day: 'Sunday', reading: '', completed: false, userEmail: email, createdAt: new Date() },
+    ];
+
+    const result = await gospelPlanCollection.insertMany(defaultWeek);
+
+    return Object.values(result.insertedIds).map((id, i) => ({
+        ...defaultWeek[i],
+        _id: id
+    }));
+}
+
+/* Recently Read functionality (within Gospel Plan) */
+// Get recently read for a user
+async function getRecentlyReadByUser(email) {
+    return recentlyReadCollection
+        .find({ userEmail: email })
+        .sort({ date: -1 }) // newest first
+        .limit(7)
+        .toArray();
+}
+
+// Add a new recently read item
+async function addRecentlyRead(userEmail, title, date) {
+    return recentlyReadCollection.insertOne({ userEmail, title, date });
+}
+
 module.exports = {
     getUser, getUserByToken, addUser, updateUser,
     addAssignment, getAssignmentsByUser, deleteAssignment,
     addGoal, getGoalsByUser, deleteGoal, updateGoalProgress,
-    addGospelPlan, getGospelPlansByUser, deleteGospelPlan, updateGospelPlan,
+    addGospelPlan, getGospelPlansByUser, updateGospelPlan, resetGospelPlanForUser,
+    getRecentlyReadByUser, addRecentlyRead,
 };
