@@ -4,13 +4,9 @@ const express = require('express');
 const uuid = require('uuid');
 const app = express();
 const fetch = require('node-fetch');
+const DB = require('./database.js');
 
 const authCookieName = 'token';
-
-// Memory storage for users and tasks (instead of scores)
-let users = [];
-let tasks = [];
-
 // Verses to pull from the API using fetch
 const popularVerses = [
     '1 Nephi 3:7',
@@ -59,6 +55,7 @@ apiRouter.post('/auth/login', async (req, res) => {
     const user = await findUser('email', req.body.email);
     if (user && await bcrypt.compare(req.body.password, user.password)) {
         user.token = uuid.v4();
+        await DB.updateUser(user);
         setAuthCookie(res, user.token);
         res.send({ email: user.email });
     } else {
@@ -69,7 +66,10 @@ apiRouter.post('/auth/login', async (req, res) => {
 // Logout user
 apiRouter.delete('/auth/logout', async (req, res) => {
     const user = await findUser('token', req.cookies[authCookieName]);
-    if (user) delete user.token;
+    if (user) {
+        delete user.token;
+        DB.updateUser(user);
+    }
     res.clearCookie(authCookieName);
     res.status(204).end();
 });
@@ -144,14 +144,22 @@ apiRouter.get('/verse', async (req, res) => {
 /* ---------------- HELPER FUNCTIONS ---------------- */
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = { email, password: passwordHash, token: uuid.v4() };
-    users.push(user);
+    const user = {
+        email,
+        password: passwordHash,
+        token: uuid.v4()
+    };
+    await DB.addUser(user);
     return user;
 }
 
 async function findUser(field, value) {
     if (!value) return null;
-    return users.find(u => u[field] === value);
+
+    if (field === 'token') {
+        return DB.getUserByToken(value);
+    }
+    return DB.getUser(value);
 }
 
 function setAuthCookie(res, authToken) {

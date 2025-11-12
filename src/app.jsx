@@ -8,6 +8,7 @@ import { GospelPlan } from './GospelPlan/GospelPlan';
 import { Home } from './Home/Home';
 import { Login } from './Login/Login';
 
+
 export default function App() {
     //Default stuff for all the dynamic content
     // Assignments
