@@ -8,6 +8,23 @@ export function Goals({ goals, setGoals }) {
     const [keywords, setKeywords] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
+    // Track what the user is currently typing for each goal
+    const [tempProgress, setTempProgress] = useState({});
+
+    // loads goals from the database when user goes to the page
+    useEffect(() => {
+        async function fetchGoals() {
+            try {
+                const res = await fetch('/api/goals', { credentials: 'include' });
+                if (!res.ok) throw new Error('Failed to fetch goals');
+                const data = await res.json();
+                setGoals(data.map(g => ({ ...g, _id: g._id.toString() })));
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchGoals();
+    }, []);
 
     // Updates the state as the user types
     function handleChange(e) {
@@ -15,24 +32,75 @@ export function Goals({ goals, setGoals }) {
     }
 
     // Submit handler
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
         if (!newGoal.trim()) return;
-        const nextId = goals.length ? Math.max(...goals.map(g => g.id)) + 1 : 1;
-        setGoals([...goals, { id: nextId, task: newGoal, progress: 0 }]);
-        setNewGoal('');
+        try {
+            const res = await fetch('/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task: newGoal, progress: 0 }),
+                credentials: 'include',
+            });
+            if (!res.ok) throw new Error('Failed to add goal');
+            const savedGoal = await res.json();
+            setGoals(prev => [...prev, { ...savedGoal, _id: savedGoal._id.toString() }]);
+            setNewGoal('');
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     // Delete handler
-    function handleDelete(id) {
-        setGoals(goals.filter(g => g.id !== id));
+    async function handleDelete(id) {
+        try {
+            const res = await fetch(`/api/goals/${id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+            if (res.ok || res.status === 204) {
+                setGoals(prev => prev.filter(g => g._id !== id));
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
-    // Handler for progress changes, ensures values are between 0 and 100
-    function handleProgressChange(id, value) {
-        const num = Number(value);
-        const clamped = Math.min(100, Math.max(0, num)); // clamp between 0 and 100
-        setGoals(goals.map(g => g.id === id ? { ...g, progress: clamped } : g));
+    function handleProgressChangeInput(id, value) {
+        const num = Math.min(100, Math.max(0, Number(value) || 0));
+        setTempProgress(prev => ({ ...prev, [id]: num }));
+    }
+
+    async function handleProgressChangeSave(id) {
+        const num = tempProgress[id];
+        if (num == null) return; // nothing to save
+
+        // Update UI immediately
+        setGoals(prev => prev.map(g => g._id === id ? { ...g, progress: num } : g));
+
+        try {
+            const res = await fetch(`/api/goals/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ progress: num }),
+                credentials: 'include',
+            });
+
+            if (!res.ok) throw new Error('Failed to update progress');
+            const updatedGoal = await res.json();
+
+            // Ensure state is in sync with DB
+            setGoals(prev => prev.map(g => g._id === id ? updatedGoal : g));
+
+            // Remove temp state for this goal
+            setTempProgress(prev => {
+                const copy = { ...prev };
+                delete copy[id];
+                return copy;
+            });
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     // Mock API call to generate goals
@@ -55,10 +123,21 @@ export function Goals({ goals, setGoals }) {
     }
 
     // === Add suggestion to goals table ===
-    function addSuggestion(goalText) {
-        const nextId = goals.length ? Math.max(...goals.map(g => g.id)) + 1 : 1;
-        setGoals([...goals, { id: nextId, task: goalText, progress: 0 }]);
-        setSuggestions(suggestions.filter(s => s !== goalText));
+    async function addSuggestion(goalText) {
+        try {
+            const res = await fetch('/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task: goalText, progress: 0 }),
+                credentials: 'include',
+            });
+            if (!res.ok) throw new Error('Failed to add suggestion');
+            const savedGoal = await res.json();
+            setGoals(prev => [...prev, savedGoal]);
+            setSuggestions(prev => prev.filter(s => s !== goalText));
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (
@@ -81,7 +160,7 @@ export function Goals({ goals, setGoals }) {
                                 {/* .map() over goals */}
                                 <tbody>
                                     {goals.map(g => (
-                                        <tr key={g.id}>
+                                        <tr key={g._id}>
                                             <td>{g.task}</td>
                                             <td>
                                                 {/* Progress bars that automatically update */}
@@ -93,8 +172,10 @@ export function Goals({ goals, setGoals }) {
                                                         type="number"
                                                         min="0"
                                                         max="100"
-                                                        value={g.progress}
-                                                        onChange={(e) => handleProgressChange(g.id, e.target.value)}
+                                                        value={tempProgress[g._id] ?? g.progress}
+                                                        onChange={(e) => handleProgressChangeInput(g._id, e.target.value)}
+                                                        onBlur={() => handleProgressChangeSave(g._id)}
+                                                        onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
                                                         style={{ width: '60px' }}
                                                     />
                                                     <span className="ms-1">%</span>
@@ -103,7 +184,7 @@ export function Goals({ goals, setGoals }) {
                                             <td>
                                                 <button
                                                     className="btn btn-sm btn-danger"
-                                                    onClick={() => handleDelete(g.id)}
+                                                    onClick={() => handleDelete(g._id)}
                                                     title="Delete goal"
                                                 >
                                                     ✖
@@ -129,7 +210,7 @@ export function Goals({ goals, setGoals }) {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <button type="submit" className="btn btn-success">Create!</button>
+                            <button type="submit" className="btn btn-success" disabled={!newGoal.trim()}>Create!</button>
                         </form>
 
                         <div className="mt-4">

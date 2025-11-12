@@ -66,6 +66,25 @@ async function deleteGoal(id, email) {
     return goalCollection.deleteOne({ _id: new ObjectId(id), userEmail: email });
 }
 
+async function updateGoalProgress(id, email, progress) {
+    if (!id || !email) throw new Error("Missing id or email");
+    const objId = new ObjectId(id); // will throw if id is invalid
+    const numProgress = Math.min(100, Math.max(0, Number(progress) || 0));
+
+    const result = await goalCollection.updateOne(
+        { _id: objId, userEmail: email },
+        { $set: { progress: numProgress } }
+    );
+
+    if (result.matchedCount === 0) {
+        throw new Error("Goal not found or user mismatch");
+    }
+
+    const updatedGoal = await goalCollection.findOne({ _id: objId, userEmail: email });
+    if (updatedGoal) updatedGoal._id = updatedGoal._id.toString();
+    return updatedGoal;
+}
+
 /* GOSPEL PLAN STUFF */
 async function addGospelPlan(plan) {
     return gospelPlanCollection.insertOne(plan);
@@ -82,6 +101,6 @@ async function deleteGospelPlan(id, email) {
 module.exports = {
     getUser, getUserByToken, addUser, updateUser,
     addAssignment, getAssignmentsByUser, deleteAssignment,
-    addGoal, getGoalsByUser, deleteGoal,
+    addGoal, getGoalsByUser, deleteGoal, updateGoalProgress,
     addGospelPlan, getGospelPlansByUser, deleteGospelPlan
 };

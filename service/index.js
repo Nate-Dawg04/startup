@@ -86,6 +86,8 @@ const verifyAuth = async (req, res, next) => {
     }
 };
 
+/* ASSIGNMENTS */
+
 // Get all assignments for logged-in user
 apiRouter.get('/assignments', verifyAuth, async (req, res) => {
     const userAssignments = await DB.getAssignmentsByUser(req.userEmail);
@@ -112,6 +114,49 @@ apiRouter.post('/assignments', verifyAuth, async (req, res) => {
 apiRouter.delete('/assignments/:id', verifyAuth, async (req, res) => {
     await DB.deleteAssignment(req.params.id, req.userEmail);
     res.status(204).end();
+});
+
+
+/* GOALS */
+
+// Get all goals for logged-in user
+apiRouter.get('/goals', verifyAuth, async (req, res) => {
+    const userGoals = await DB.getGoalsByUser(req.userEmail);
+    res.send(userGoals);
+});
+
+// Add a new goal
+apiRouter.post('/goals', verifyAuth, async (req, res) => {
+    const { task, progress } = req.body;
+    if (!task) return res.status(400).send({ msg: 'Missing task' });
+
+    const newGoal = {
+        userEmail: req.userEmail,
+        task,
+        progress: progress || 0,
+        createdAt: new Date(),
+    };
+
+    const result = await DB.addGoal(newGoal);
+    res.status(201).send({ ...newGoal, _id: result.insertedId });
+});
+
+// Delete a goal
+apiRouter.delete('/goals/:id', verifyAuth, async (req, res) => {
+    await DB.deleteGoal(req.params.id, req.userEmail);
+    res.status(204).end();
+});
+
+// Update goal progress
+apiRouter.patch('/goals/:id', verifyAuth, async (req, res) => {
+    try {
+        const { progress } = req.body;
+        const updatedGoal = await DB.updateGoalProgress(req.params.id, req.userEmail, progress);
+        res.send(updatedGoal);
+    } catch (err) {
+        console.error('PATCH /goals/:id error:', err);
+        res.status(500).send({ error: err.message });
+    }
 });
 
 // Gets a random verse from the API using the list above
