@@ -44,7 +44,7 @@ git commit -am              //same as last one but also adds the files to the pu
 My IP address is: *52.71.57.242*\
 My key pair is called "WebKey.pem" and is saved in my Downloads folder
 
-### Command to remove shell into my server:
+### Command to remote shell into my server:
 ```
 ssh -i ~/Downloads/WebKey.pem ubuntu@52.71.57.242
 ```
