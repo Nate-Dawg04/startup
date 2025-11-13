@@ -120,8 +120,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [X] **Stores data in MongoDB** - My startup stores a user's assignments, goals, gospel study plan, and recently read items (from their plan) in MongoDB. This ended up being very repetetive and a bit tedious but it worked out. 
+- [X] **Stores credentials in MongoDB** - Login information is stored in mongoDB to allow each user to have personalized goals, assignments, and gospel study plans.
+
 
 ## 🚀 WebSocket deliverable
 
