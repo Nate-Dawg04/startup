@@ -22,6 +22,27 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     // useState for the message for a new week
     const [message, setMessage] = useState('');
 
+    // useState for the other users recently read stuff
+    const [otherUsersRecentlyRead, setOtherUsersRecentlyRead] = useState([]);
+
+    // useEffect for Websocket functionality
+    useEffect(() => {
+        const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+        const ws = new WebSocket(`${protocol}://${window.location.host}`);
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            // Add incoming updates to the “other users recently read” state
+            setOtherUsersRecentlyRead(prev => [data, ...prev]);
+        };
+
+        ws.onopen = () => console.log('WebSocket connected');
+
+        ws.onclose = () => console.log('WebSocket disconnected');
+
+        return () => ws.close();
+    }, []);
+
     // stores recentlyRead stuff in local storage
     useEffect(() => {
         localStorage.setItem('procrastinot_recentlyRead', JSON.stringify(recentlyRead));
@@ -440,7 +461,21 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                             <ul className="list-group">
 
                                 <li className="list-group-item text-muted">
-                                    <i>(WebSocket stuff here)</i>
+                                    <ul className="list-group">
+                                        {[...otherUsersRecentlyRead]
+                                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                            .map(item => (
+                                                <li key={item._id} className="list-group-item d-flex justify-content-between align-items-start">
+                                                    <div className="ms-2 me-auto">
+                                                        <div className="fw-bold">{item.title}</div>
+                                                        <small>
+                                                            <b>User:</b> {item.userEmail} &nbsp; | &nbsp;
+                                                            <b>Date:</b> {new Date(item.date).toLocaleDateString()}
+                                                        </small>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
