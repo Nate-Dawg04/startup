@@ -360,7 +360,7 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                     <div className="col-12 col-lg-6 mb-3 mb-lg-0">
 
                         <h3>
-                            Recently Read:
+                            Your Recently Read:
                         </h3>
 
                         {/* <!-- Scrollable recently read list, storted by the date they were read --> */}
@@ -434,7 +434,7 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
                     {/* RIGHT COLUMN — Other User's reads (using Websocket) */}
                     <div className="col-12 col-lg-6 mb-4">
-                        <h3>Recently Read by Other Users</h3>
+                        <h3>Recently Read by Other Users:</h3>
 
                         <div className="other-users-scroll">
                             <ul className="list-group">

@@ -5,6 +5,7 @@ const uuid = require('uuid');
 const app = express();
 const fetch = require('node-fetch');
 const DB = require('./database.js');
+const { peerProxy } = require('./peerProxy');
 
 const authCookieName = 'token';
 // Verses to pull from the API using fetch
@@ -332,6 +333,8 @@ app.use((err, req, res, next) => {
 });
 
 /* ---------------- START SERVER ---------------- */
-app.listen(port, () => {
-    console.log(`Procrastinot backend listening on port ${port}`);
+const server = app.listen(port, () => {
+    console.log(`Startup backend + WebSocket running on port ${port}`);
 });
+
+peerProxy(server);
