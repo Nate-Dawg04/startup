@@ -6,6 +6,9 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     // useState for the recently read stuff
     const [recentlyRead, setRecentlyRead] = useState([]);
 
+    // current user state
+    const [currentUserEmail, setCurrentUserEmail] = useState('');
+
     //useStates for editing the readings
     const [newDay, setNewDay] = useState('');
     const [newReading, setNewReading] = useState('');
@@ -25,6 +28,21 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     // useState for the other users recently read stuff
     const [otherUsersRecentlyRead, setOtherUsersRecentlyRead] = useState([]);
 
+    // useEffect to get the current user (for websocket)
+    useEffect(() => {
+        async function fetchCurrentUser() {
+            try {
+                const res = await fetch('/api/me', { credentials: 'include' });
+                if (!res.ok) throw new Error('Failed to fetch user');
+                const data = await res.json();
+                setCurrentUserEmail(data.email);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchCurrentUser();
+    }, []);
+
     // useEffect for Websocket functionality
     useEffect(() => {
         const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
@@ -32,16 +50,37 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            // Add incoming updates to the “other users recently read” state
-            setOtherUsersRecentlyRead(prev => [data, ...prev]);
+            // Only add if the message is NOT from the current user
+            if (data.userEmail !== currentUserEmail) {
+                setOtherUsersRecentlyRead(prev => [data, ...prev]);
+            }
         };
 
         ws.onopen = () => console.log('WebSocket connected');
-
         ws.onclose = () => console.log('WebSocket disconnected');
 
         return () => ws.close();
-    }, []);
+    }, [currentUserEmail]);
+
+    // useEffect to get all recently read Items (excluding the user) for the other user list
+    useEffect(() => {
+        async function fetchOtherUsersRecentlyRead() {
+            try {
+                const res = await fetch('/api/recentlyRead', { credentials: 'include' });
+                if (!res.ok) throw new Error('Failed to fetch other users recently read');
+                const data = await res.json();
+
+                // Exclude the current user's items
+                const filtered = data.filter(item => item.userEmail !== currentUserEmail);
+                setOtherUsersRecentlyRead(filtered);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        if (currentUserEmail) fetchOtherUsersRecentlyRead();
+    }, [currentUserEmail]);
+
 
     // stores recentlyRead stuff in local storage
     useEffect(() => {
@@ -459,20 +498,14 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
                         <div className="other-users-scroll">
                             <ul className="list-group">
-
                                 <li className="list-group-item text-muted">
                                     <ul className="list-group">
-                                        {[...otherUsersRecentlyRead]
+                                        {otherUsersRecentlyRead
                                             .sort((a, b) => new Date(b.date) - new Date(a.date))
                                             .map(item => (
-                                                <li key={item._id} className="list-group-item d-flex justify-content-between align-items-start">
-                                                    <div className="ms-2 me-auto">
-                                                        <div className="fw-bold">{item.title}</div>
-                                                        <small>
-                                                            <b>User:</b> {item.userEmail} &nbsp; | &nbsp;
-                                                            <b>Date:</b> {new Date(item.date).toLocaleDateString()}
-                                                        </small>
-                                                    </div>
+                                                <li key={item._id} className="list-group-item">
+                                                    <div>{item.title}</div>
+                                                    <small className="text-muted">Read by {item.userEmail} on {new Date(item.date).toLocaleDateString()}</small>
                                                 </li>
                                             ))}
                                     </ul>

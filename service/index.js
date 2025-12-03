@@ -303,6 +303,11 @@ apiRouter.get('/verse', async (req, res) => {
     }
 });
 
+// Get currently logged-in user's email
+apiRouter.get('/me', verifyAuth, (req, res) => {
+    res.send({ email: req.userEmail });
+});
+
 /* ---------------- HELPER FUNCTIONS ---------------- */
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);
