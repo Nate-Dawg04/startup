@@ -388,42 +388,65 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                 </div>
             </div>
 
-            {/* <!-- coming soon... --> */}
-            <div className="mt-4">
-                <h3>Get Study Suggestions</h3>
-                <input
-                    type="text"
-                    className="form-control mb-2"
-                    placeholder="Enter topics, e.g., faith, prayer"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                />
-                <button
-                    className="btn btn-success mb-3"
-                    onClick={generateSuggestionsMock}
-                    disabled={loading}
-                >
-                    {loading ? 'Generating...' : 'Generate Suggestions'}
-                </button>
+            {/* Bottom two columns */}
+            <div className="container mt-5">
+                <div className="row">
 
-                {suggestions.length > 0 && (
-                    <div className="table-responsive">
-                        <table className="table table-hover table-bordered suggestions-table">
-                            <thead>
-                                <tr>
-                                    <th>Suggested Study Items</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {suggestions.map((s, i) => (
-                                    <tr key={i} className="table-light">
-                                        <td>{s}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    {/* LEFT COLUMN — Study Suggestions */}
+                    <div className="col-12 col-lg-6 mb-4">
+                        <h3>Get Study Suggestions</h3>
+
+                        <input
+                            type="text"
+                            className="form-control mb-2"
+                            placeholder="Enter topics, e.g., faith, prayer"
+                            value={topic}
+                            onChange={(e) => setTopic(e.target.value)}
+                        />
+
+                        <button
+                            className="btn btn-success mb-3"
+                            onClick={generateSuggestionsMock}
+                            disabled={loading}
+                        >
+                            {loading ? 'Generating...' : 'Generate Suggestions'}
+                        </button>
+
+                        {suggestions.length > 0 && (
+                            <div className="table-responsive">
+                                <table className="table table-hover table-bordered suggestions-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Suggested Study Items</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {suggestions.map((s, i) => (
+                                            <tr key={i} className="table-light">
+                                                <td>{s}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
-                )}
+
+                    {/* RIGHT COLUMN — Other User's reads (using Websocket) */}
+                    <div className="col-12 col-lg-6 mb-4">
+                        <h3>Recently Read by Other Users</h3>
+
+                        <div className="other-users-scroll">
+                            <ul className="list-group">
+
+                                <li className="list-group-item text-muted">
+                                    <i>(WebSocket stuff here)</i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </main>
     );

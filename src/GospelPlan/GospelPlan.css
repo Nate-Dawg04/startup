@@ -39,3 +39,13 @@ input.form-control-sm {
     padding: 5px;
     background-color: #f8f9fa;
 }
+
+/* Other users table scroll */
+.other-users-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    background: #f8f9fa;
+}
