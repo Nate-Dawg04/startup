@@ -55,10 +55,17 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
                 ws.onmessage = (event) => {
                     const data = JSON.parse(event.data);
-                    if (data.userEmail !== currentUserRef.current) {
-                        setOtherUsersRecentlyRead(prev => [data, ...prev]);
+
+                    const wsEmail = (data.userEmail || '').trim().toLowerCase();
+                    const me = (currentUserRef.current || '').trim().toLowerCase();
+
+                    if (!wsEmail || wsEmail === me) {
+                        return; // ignore own or malformed events
                     }
+
+                    setOtherUsersRecentlyRead(prev => [data, ...prev]);
                 };
+
             } catch (err) {
                 console.error(err);
             }
@@ -345,6 +352,8 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         }
     }
 
+    console.log('currentUserEmail =', currentUserEmail);
+    console.log('otherUsersRecentlyRead =', otherUsersRecentlyRead);
 
     return (
         <main className="flex-grow-1">
@@ -516,12 +525,16 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                         <div className="recently-read-scrollable">
                             <ol className="list-group list-group-numbered mb-0">
                                 {[...otherUsersRecentlyRead]
+                                    .filter(item =>
+                                        (item.userEmail || '').trim().toLowerCase() !==
+                                        (currentUserEmail || '').trim().toLowerCase()
+                                    )
                                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                                     .map(item => (
                                         <li key={item._id} className="list-group-item d-flex justify-content-between align-items-start">
                                             <div className="ms-2 me-auto">
                                                 <div className="fw-bold">{item.title}</div>
-                                                <small className="text-muted">Read by {item.userEmail} on {new Date(item.date).toLocaleDateString()}</small>
+                                                <small className="text-muted">Read by <b>{item.userEmail}</b> on {new Date(item.date).toLocaleDateString()}</small>
                                             </div>
                                         </li>
                                     ))}
