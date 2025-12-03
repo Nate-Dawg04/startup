@@ -79,22 +79,43 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
     // useEffect to get all recently read Items (excluding the user) for the other user list
     useEffect(() => {
+        if (!currentUserEmail) return;
+
         async function fetchOtherUsersRecentlyRead() {
             try {
-                const res = await fetch('/api/recentlyRead', { credentials: 'include' });
-                if (!res.ok) throw new Error('Failed to fetch other users recently read');
+                const res = await fetch('/api/recentlyRead/all', { credentials: 'include' });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
                 const data = await res.json();
 
-                // Exclude the current user's items
-                const filtered = data.filter(item => item.userEmail !== currentUserEmail);
+                const me = currentUserEmail.trim().toLowerCase();
+                const filtered = data.filter(item =>
+                    (item.userEmail || '').trim().toLowerCase() !== me
+                );
+
                 setOtherUsersRecentlyRead(filtered);
             } catch (err) {
-                console.error(err);
+                console.error('Fetch other users failed:', err);
             }
         }
 
-        if (currentUserEmail) fetchOtherUsersRecentlyRead();
+        // Initial load
+        fetchOtherUsersRecentlyRead();
+
+        // Refresh when tab becomes visible (fix for google chrome)
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                fetchOtherUsersRecentlyRead();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, [currentUserEmail]);
+
 
 
     // stores recentlyRead stuff in local storage
