@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './GospelPlan.css';
 
@@ -8,6 +8,11 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
     // current user state
     const [currentUserEmail, setCurrentUserEmail] = useState('');
+    const currentUserRef = useRef('');
+
+    useEffect(() => {
+        currentUserRef.current = currentUserEmail;
+    }, [currentUserEmail]);
 
     //useStates for editing the readings
     const [newDay, setNewDay] = useState('');
@@ -28,6 +33,9 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
     // useState for the other users recently read stuff
     const [otherUsersRecentlyRead, setOtherUsersRecentlyRead] = useState([]);
 
+    // useRef for websocket
+    const wsRef = useRef(null);
+
     // useEffect to get the current user (for websocket)
     useEffect(() => {
         async function fetchCurrentUser() {
@@ -35,32 +43,32 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                 const res = await fetch('/api/me', { credentials: 'include' });
                 if (!res.ok) throw new Error('Failed to fetch user');
                 const data = await res.json();
-                setCurrentUserEmail(data.email);
+                setCurrentUserEmail(data.userEmail);
+
+                // Initialize WebSocket after getting email
+                const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+                const ws = new WebSocket(`${protocol}://${window.location.host}/ws`);
+                wsRef.current = ws;
+
+                ws.onopen = () => console.log('WebSocket connected');
+                ws.onclose = () => console.log('WebSocket disconnected');
+
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.userEmail !== currentUserRef.current) {
+                        setOtherUsersRecentlyRead(prev => [data, ...prev]);
+                    }
+                };
             } catch (err) {
                 console.error(err);
             }
         }
         fetchCurrentUser();
-    }, []);
 
-    // useEffect for Websocket functionality
-    useEffect(() => {
-        const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
-        const ws = new WebSocket(`${protocol}://${window.location.host}`);
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            // Only add if the message is NOT from the current user
-            if (data.userEmail !== currentUserEmail) {
-                setOtherUsersRecentlyRead(prev => [data, ...prev]);
-            }
+        return () => {
+            if (wsRef.current) wsRef.current.close();
         };
-
-        ws.onopen = () => console.log('WebSocket connected');
-        ws.onclose = () => console.log('WebSocket disconnected');
-
-        return () => ws.close();
-    }, [currentUserEmail]);
+    }, []);
 
     // useEffect to get all recently read Items (excluding the user) for the other user list
     useEffect(() => {
@@ -209,6 +217,15 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
 
             // Update recentlyRead state live
             setRecentlyRead(prev => [newItem, ...prev]);
+
+            // After saving to DB, update via websocket for other users
+            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+                wsRef.current.send(JSON.stringify({
+                    title: completedItem.reading,
+                    userEmail: currentUserEmail,
+                    date: new Date().toISOString()
+                }));
+            }
         } catch (err) {
             console.error(err);
         }
@@ -496,21 +513,19 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                     <div className="col-12 col-lg-6 mb-4">
                         <h3>Recently Read by Other Users:</h3>
 
-                        <div className="other-users-scroll">
-                            <ul className="list-group">
-                                <li className="list-group-item text-muted">
-                                    <ul className="list-group">
-                                        {otherUsersRecentlyRead
-                                            .sort((a, b) => new Date(b.date) - new Date(a.date))
-                                            .map(item => (
-                                                <li key={item._id} className="list-group-item">
-                                                    <div>{item.title}</div>
-                                                    <small className="text-muted">Read by {item.userEmail} on {new Date(item.date).toLocaleDateString()}</small>
-                                                </li>
-                                            ))}
-                                    </ul>
-                                </li>
-                            </ul>
+                        <div className="recently-read-scrollable">
+                            <ol className="list-group list-group-numbered mb-0">
+                                {[...otherUsersRecentlyRead]
+                                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                    .map(item => (
+                                        <li key={item._id} className="list-group-item d-flex justify-content-between align-items-start">
+                                            <div className="ms-2 me-auto">
+                                                <div className="fw-bold">{item.title}</div>
+                                                <small className="text-muted">Read by {item.userEmail} on {new Date(item.date).toLocaleDateString()}</small>
+                                            </div>
+                                        </li>
+                                    ))}
+                            </ol>
                         </div>
                     </div>
 
