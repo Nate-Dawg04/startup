@@ -138,7 +138,7 @@ async function getRecentlyReadByUser(email) {
     return recentlyReadCollection
         .find({ userEmail: email })
         .sort({ date: -1 }) // newest first
-        .limit(7)
+        .limit(50)
         .toArray();
 }
 

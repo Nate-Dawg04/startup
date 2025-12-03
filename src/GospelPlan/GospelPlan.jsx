@@ -508,10 +508,6 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
                             </ol>
                         </div>
 
-                        {/* <!-- coming soon... --> */}
-                        <p className="placeholders"><b>Websocket data</b> that shows what others have been reading and what's
-                            popular worldwide (maybe add later, time allowing)</p>
-
                     </div>
                 </div>
             </div>

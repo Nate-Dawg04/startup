@@ -30,7 +30,7 @@ input.form-control-sm {
 }
 
 .recently-read-scrollable {
-    max-height: 280px;
+    max-height: 350px;
     /* fixed height for scrollable area */
     overflow-y: auto;
     /* vertical scrolling if content exceeds height */
@@ -38,6 +38,7 @@ input.form-control-sm {
     border-radius: 5px;
     padding: 5px;
     background-color: #f8f9fa;
+    margin-top: 24px;
 }
 
 /* Other users table scroll */
