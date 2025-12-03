@@ -257,6 +257,18 @@ apiRouter.post('/recentlyRead', verifyAuth, async (req, res) => {
         const date = new Date();
         const result = await DB.addRecentlyRead(req.userEmail, title, date);
         res.status(201).send({ _id: result.insertedId.toString(), title, date });
+        // Broadcast to other connected WebSocket clients
+        if (global.wss) {
+            const message = JSON.stringify({
+                title,
+                userEmail: req.userEmail,
+                date
+            });
+
+            global.wss.clients.forEach((client) => {
+                if (client.readyState === client.OPEN) client.send(message);
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send({ error: err.message });
@@ -337,4 +349,5 @@ const server = app.listen(port, () => {
     console.log(`Startup backend + WebSocket running on port ${port}`);
 });
 
-peerProxy(server);
+const wss = peerProxy(server);
+global.wss = wss;
