@@ -352,8 +352,29 @@ export function GospelPlan({ weeklyPlan, setWeeklyPlan }) {
         }
     }
 
-    console.log('currentUserEmail =', currentUserEmail);
-    console.log('otherUsersRecentlyRead =', otherUsersRecentlyRead);
+    // useEffect to get all the recently Read stuff for everyone except the current user
+    useEffect(() => {
+        async function fetchOtherUsersRecentlyRead() {
+            try {
+                const res = await fetch('/api/recentlyRead/all', { credentials: 'include' });
+                if (!res.ok) throw new Error('Failed to fetch other users recently read');
+                const data = await res.json();
+
+                const me = (currentUserEmail || '').trim().toLowerCase();
+                const filtered = data.filter(item =>
+                    (item.userEmail || '').trim().toLowerCase() !== me
+                );
+
+                setOtherUsersRecentlyRead(filtered);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        if (currentUserEmail) fetchOtherUsersRecentlyRead();
+    }, [currentUserEmail]);
+
+
 
     return (
         <main className="flex-grow-1">

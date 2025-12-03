@@ -142,6 +142,16 @@ async function getRecentlyReadByUser(email) {
         .toArray();
 }
 
+// Get recently read for all users (for the websocket part)
+async function getRecentlyReadAll(limit = 50) {
+    return recentlyReadCollection
+        .find({})          // all emails
+        .sort({ date: -1 }) // newest first
+        .limit(limit)
+        .toArray();
+}
+
+
 // Add a new recently read item
 async function addRecentlyRead(userEmail, title, date) {
     return recentlyReadCollection.insertOne({ userEmail, title, date });
@@ -158,4 +168,5 @@ module.exports = {
     addGoal, getGoalsByUser, deleteGoal, updateGoalProgress,
     addGospelPlan, getGospelPlansByUser, updateGospelPlan, resetGospelPlanForUser,
     getRecentlyReadByUser, addRecentlyRead, removeRecentlyReadItem,
+    getRecentlyReadAll,
 };

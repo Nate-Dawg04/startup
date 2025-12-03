@@ -237,7 +237,7 @@ apiRouter.post('/gospelPlan/reset', verifyAuth, async (req, res) => {
 });
 
 /* RECENTLY READ */
-// Get recently read items
+// Get recently read items (filtered by user)
 apiRouter.get('/recentlyRead', verifyAuth, async (req, res) => {
     try {
         const items = await DB.getRecentlyReadByUser(req.userEmail);
@@ -247,6 +247,19 @@ apiRouter.get('/recentlyRead', verifyAuth, async (req, res) => {
         res.status(500).send({ error: err.message });
     }
 });
+
+// Example: get all the recently read stuff (all users)
+apiRouter.get('/recentlyRead/all', verifyAuth, async (req, res) => {
+    try {
+        const items = await DB.getRecentlyReadAll();
+        res.send(items.map(i => ({ ...i, _id: i._id.toString() })));
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+
 
 // Add a new recently read item
 apiRouter.post('/recentlyRead', verifyAuth, async (req, res) => {
