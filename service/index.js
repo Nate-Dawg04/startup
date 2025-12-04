@@ -259,8 +259,6 @@ apiRouter.get('/recentlyRead/all', verifyAuth, async (req, res) => {
     }
 });
 
-
-
 // Add a new recently read item
 apiRouter.post('/recentlyRead', verifyAuth, async (req, res) => {
     try {

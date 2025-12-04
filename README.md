@@ -128,8 +128,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [X] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [X] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [X] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [X] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [X] **Application is fully functional** - I did not complete this part of the deliverable.
+- [X] **Backend listens for WebSocket connection** - peerProxy.js and index.js manage and listen for the WebSocket connection. 
+- [X] **Frontend makes WebSocket connection** - Code in the GospelPlan.jsx page connects to the Websocket
+- [X] **Data sent over WebSocket connection** - User's recently read items are sent over the websocket connection. An email is attached, which allows for the data to be filtered and displayed (each user can only see the recently read items from other users, not their own)
+- [X] **WebSocket data displayed** - Data is displayed on the Gospel Plan page in a scrollable table. It also uses the database to display things that were read in the past, and adds any new websocket data to the top of the table. 
+- [X] **Application is fully functional** - While there are still a few things I'd like to implement in the future, my startup is fully functional as is. In the future I plan to fully implement the ChatGPT API for goal and suggestions, as well as use the canvas API for live grade updates. However, I know that will be a very big time commitment and I haven't been able to do it yet. 
